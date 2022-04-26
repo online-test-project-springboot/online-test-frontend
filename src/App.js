@@ -1,13 +1,9 @@
 // import "./App.css";
-import HomeFeature from './features/Home';
-import ProductFeature from 'features/products';
 import React from 'react';
-import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
 import NotFound from './components/NotFound';
-import CounterFeature from './features/Counter';
-import SongFeature from './features/Song';
-import TodoFeature from './features/Todo';
+import HomeFeature from './features/Home';
 
 function App() {
   return (
@@ -20,9 +16,9 @@ function App() {
 
         {/* <Route path="/" component={CounterFeature} exact /> */}
         <Route path="/" component={HomeFeature} exact />
-        <Route path="/todos" component={TodoFeature} />
+        {/* <Route path="/todos" component={TodoFeature} />
         <Route path="/albums" component={SongFeature} />
-        <Route path="/products" component={ProductFeature} />
+        <Route path="/products" component={ProductFeature} /> */}
 
         <Route component={NotFound} />
       </Switch>
