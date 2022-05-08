@@ -3,27 +3,27 @@ import StorageKeys from 'constants/storage-keys';
 import userApi from '../../api/userApi';
 
 export const register = createAsyncThunk('user/register', async (payload) => {
-  const data = await userApi.register(payload);
+  const response = await userApi.register(payload);
 
-  localStorage.setItem(StorageKeys.TOKEN, data.jwt);
-  localStorage.setItem(StorageKeys.USER, JSON.stringify(data.user));
+  localStorage.setItem(StorageKeys.TOKEN, response.jwt);
+  localStorage.setItem(StorageKeys.DATA, JSON.stringify(response.data));
 
-  return data.user;
+  return response.data;
 });
 
 export const login = createAsyncThunk('user/login', async (payload) => {
-  const data = await userApi.login(payload);
+  const response = await userApi.login(payload);
 
-  localStorage.setItem(StorageKeys.TOKEN, data.jwt);
-  localStorage.setItem(StorageKeys.USER, JSON.stringify(data.user));
+  localStorage.setItem(StorageKeys.TOKEN, response.jwt);
+  localStorage.setItem(StorageKeys.DATA, JSON.stringify(response.data));
 
-  return data.user;
+  return response.data;
 });
 
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    current: JSON.parse(localStorage.getItem(StorageKeys.USER)) || {},
+    current: JSON.parse(localStorage.getItem(StorageKeys.DATA)) || {},
     settings: {},
   },
   reducers: {

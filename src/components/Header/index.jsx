@@ -56,7 +56,7 @@ export default function Header() {
   const dispatch = useDispatch();
 
   const loggedInUser = useSelector((state) => state.user.current);
-  const isLoggedIn = !!loggedInUser.id;
+  const isLoggedIn = !!loggedInUser.fullName;
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(MODE.LOGIN);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -104,7 +104,7 @@ export default function Header() {
             </Link>
           </Typography>
 
-          <NavLink to="/todos" className={classes.link}>
+          <NavLink to="/" className={classes.link}>
             <Button color="inherit">Trang chủ</Button>
           </NavLink>
 
@@ -125,9 +125,14 @@ export default function Header() {
           )}
 
           {isLoggedIn && (
-            <IconButton color="inherit" onClick={handleAccountClick}>
-              <AccountCircle />
-            </IconButton>
+            <Box>
+              <IconButton color="inherit" onClick={handleAccountClick}>
+                <AccountCircle />
+              </IconButton>
+              <Typography variant="subtitle2" display="inline">
+                Xin chào {loggedInUser.fullName}
+              </Typography>
+            </Box>
           )}
         </Toolbar>
       </AppBar>
