@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import bgHome from 'img/bgHome.jpg';
+import bgHome from 'img/bgHome.png';
 import React from 'react';
 
 const useStyles = makeStyles((theme) => ({

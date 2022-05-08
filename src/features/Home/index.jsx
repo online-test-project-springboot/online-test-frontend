@@ -22,11 +22,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   loginBtn: {
-    backgroundImage: 'linear-gradient(to right, blue , green)',
+    backgroundImage: ' linear-gradient( 0.25turn,#12c2e9,#ffdde1)',
     marginTop: '10px',
     marginLeft: '12px',
     borderRadius: '20px',
-    border: '1px solid black',
+    border: '0.5px solid white',
+    color:'#000000de',
+    font:'sans-serif',
   },
 }));
 
@@ -51,7 +53,7 @@ function HomeFeature(props) {
         <Button className={classes.loginBtn} color="inherit">
           Tạo đề thi
         </Button>
-        <NavLink to="/topic" className={classes.link}>
+        <NavLink to="/" className={classes.link}>
           <Button onClick={handleDirect} className={classes.loginBtn} color="inherit">
             Tạo chủ đề
           </Button>
