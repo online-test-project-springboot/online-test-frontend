@@ -1,9 +1,9 @@
+import { Box, Card, CardContent, Grid, makeStyles, Typography } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import PropTypes from 'prop-types';
 import React from 'react';
-  import PropTypes from 'prop-types';
-  import { Box, Card, CardContent, Grid, makeStyles, Typography } from '@material-ui/core';
-  import Topic from './Topic';
-  import AddIcon from '@material-ui/icons/Add';
-  import { Link } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
+import Topic from './Topic';
 
   TopicList.propTypes = {
     data: PropTypes.array,
@@ -32,11 +32,13 @@ import React from 'react';
 
   function TopicList({ data = [] }) {
     const classes = useStyles();
+    const match = useRouteMatch();
+    
     return (
       <Box margin={3}>
         <Grid container>
           <Grid item>
-            <Link to="/topic-list/create" className={classes.link}>
+          <Link to={`${match.path}/create`} className={classes.link}>
               <Card className={classes.root}>
                 <CardContent>
                   <AddIcon className={classes.icon} />
@@ -50,7 +52,8 @@ import React from 'react';
           </Grid>
           {data.map((topic, index) => (
             <Grid item key={topic.code}>
-              <Topic topic={topic} />
+            <Link to={`${match.path}/${topic.code}`}><Topic topic={topic} /></Link>
+              
             </Grid>
           ))}
         </Grid>
