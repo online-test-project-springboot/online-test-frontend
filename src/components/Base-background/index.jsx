@@ -4,7 +4,7 @@ import bgHome from 'img/bgHome.png';
 import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
-  bgHome: {
+  backgroundHome: {
     position: 'fixed',
     top: 0,
     right: 0,
@@ -20,7 +20,7 @@ function BaseBg(props) {
   const classes = useStyles();
   return (
     <Box
-      className={classes.bgHome}
+      className={classes.backgroundHome}
       component="img"
       sx={{
         height: '100vh',

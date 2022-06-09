@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import { Button, Dialog } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -8,8 +8,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import DialogQuestion from 'components/DialogQuestion';
+import DialogRemove from 'components/DialogRemove';
+import { contentRemoveQuestion } from 'constants/content';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { Transition } from 'utils';
+import AddQuestion from './AddQuestion';
 
 QuestionList.propTypes = {
   data: PropTypes.array,
@@ -39,11 +44,18 @@ const useStyles = makeStyles({
     maxHeight: 440,
   },
 });
+const MODE = {
+  REMOVE: 'remove',
+  EDIT: 'edit',
+  DETAIL: 'detail',
+};
 
 function QuestionList({ data = [] }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState(MODE.DETAIL);
 
   const handleChangePage = (event, newPage) => {
     console.log(newPage);
@@ -53,6 +65,25 @@ function QuestionList({ data = [] }) {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const handleClickOpenRemove = () => {
+    setOpen(true);
+    setMode(MODE.REMOVE);
+  };
+
+  const handleClickOpenDetail = () => {
+    setOpen(true);
+    setMode(MODE.DETAIL);
+  };
+
+  const handleClickOpenEdit = () => {
+    setOpen(true);
+    setMode(MODE.EDIT);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -91,9 +122,9 @@ function QuestionList({ data = [] }) {
                       );
                     })}
                     <TableCell key="action" align="center">
-                      <Button>Xem</Button>
-                      <Button>Sửa</Button>
-                      <Button>Xóa</Button>
+                      <Button onClick={handleClickOpenDetail}>Xem</Button>
+                      <Button onClick={handleClickOpenEdit}>Sửa</Button>
+                      <Button onClick={handleClickOpenRemove}>Xóa</Button>
                     </TableCell>
                   </TableRow>
                 );
@@ -110,6 +141,31 @@ function QuestionList({ data = [] }) {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        {mode === MODE.REMOVE && (
+          <>
+            <DialogRemove contentRemove={contentRemoveQuestion} closeDialog={handleClose} />
+          </>
+        )}
+
+        {mode === MODE.DETAIL && (
+          <>
+            <DialogQuestion closeDialog={handleClose} />
+          </>
+        )}
+
+        {mode === MODE.EDIT && (
+          <>
+            <AddQuestion closeDialog={handleClose} />
+          </>
+        )}
+      </Dialog>
     </Paper>
   );
 }
