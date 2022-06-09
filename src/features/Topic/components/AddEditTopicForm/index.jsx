@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, LinearProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import InputField from '../../../../components/Form-controls/InputField';
@@ -35,11 +35,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-CreateForm.propTypes = {
+AddEditForm.propTypes = {
   onSubmit: PropTypes.func,
+  data: PropTypes.object,
 };
 
-function CreateForm(props) {
+function AddEditForm({ onSubmit = null, data = {} }) {
   const classes = useStyles();
 
   const schema = yup.object().shape({
@@ -57,12 +58,15 @@ function CreateForm(props) {
   });
 
   const handleSubmit = async (values) => {
-    const { onSubmit } = props;
-
     if (onSubmit) {
       await onSubmit(values);
     }
   };
+
+  useEffect(() => {
+    const fields = ['name', 'description'];
+    fields.forEach((field) => form.setValue(field, data[field]));
+  }, [data]);
 
   const { isSubmitting } = form.formState;
   return (
@@ -89,4 +93,4 @@ function CreateForm(props) {
   );
 }
 
-export default CreateForm;
+export default AddEditForm;

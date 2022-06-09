@@ -1,7 +1,7 @@
 import { Box, makeStyles } from '@material-ui/core';
 import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import CreatePage from './page/CreatePage';
+import AddEditPage from './page/AddEditPage';
 import DetailPage from './page/DetailPage';
 import ListPage from './page/ListPage';
 
@@ -23,11 +23,11 @@ function TopicFeature(props) {
   const match = useRouteMatch();
   return (
     <Box className={classes.root}>
-  
       <Switch>
         <Route path={match.path} component={ListPage} exact />
-        <Route path={`${match.path}/create`} component={CreatePage} exact />
-        <Route path={`${match.path}/:topicId`} component={DetailPage} exact />
+        <Route path={`${match.path}/add`} component={AddEditPage} />
+        <Route path={`${match.path}/edit/:topicId`} component={AddEditPage} />
+        <Route path={`${match.path}/detail/:topicId`} component={DetailPage} />
       </Switch>
     </Box>
   );

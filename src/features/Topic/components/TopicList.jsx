@@ -5,60 +5,59 @@ import React from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import Topic from './Topic';
 
-  TopicList.propTypes = {
-    data: PropTypes.array,
-  };
+TopicList.propTypes = {
+  data: PropTypes.array,
+};
 
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      minWidth: 180,
-      minHeight: 130,
-      marginLeft: theme.spacing(2),
-      marginTop: theme.spacing(2),
-      backgroundColor: 'moccasin',
-      textAlign: 'center',
-    },
+const useStyles = makeStyles((theme) => ({
+  root: {
+    minWidth: 180,
+    minHeight: 130,
+    marginLeft: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    backgroundColor: 'moccasin',
+    textAlign: 'center',
+  },
 
-    icon: {
-      fontSize: 50,
-      paddingTop: 15,
-    },
+  icon: {
+    fontSize: 50,
+    paddingTop: 15,
+  },
 
-    link: {
-      textDecoration: 'none',
-      color: 'black',
-    },
-  }));
+  link: {
+    textDecoration: 'none',
+    color: 'black',
+  },
+}));
 
-  function TopicList({ data = [] }) {
-    const classes = useStyles();
-    const match = useRouteMatch();
-    
-    return (
-      <Box margin={3}>
-        <Grid container>
-          <Grid item>
-          <Link to={`${match.path}/create`} className={classes.link}>
-              <Card className={classes.root}>
-                <CardContent>
-                  <AddIcon className={classes.icon} />
+function TopicList({ data = [] }) {
+  const classes = useStyles();
+  const match = useRouteMatch();
 
-                  <Typography variant="body2" component="p">
-                    Thêm
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Link>
-          </Grid>
-          {data.map((topic, index) => (
-            <Grid item key={topic.code}>
-            <Link to={`${match.path}/${topic.code}`}><Topic topic={topic} /></Link>
-              
-            </Grid>
-          ))}
+  return (
+    <Box margin={3}>
+      <Grid container>
+        <Grid item>
+          <Link to={`${match.path}/add`} className={classes.link}>
+            <Card className={classes.root}>
+              <CardContent>
+                <AddIcon className={classes.icon} />
+
+                <Typography variant="body2" component="p">
+                  Thêm
+                </Typography>
+              </CardContent>
+            </Card>
+          </Link>
         </Grid>
-      </Box>
-    );
-  }
+        {data.map((topic, index) => (
+          <Grid item key={topic.code}>
+            <Topic topic={topic} />
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
+}
 
-  export default TopicList;
+export default TopicList;

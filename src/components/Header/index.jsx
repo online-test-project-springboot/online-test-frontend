@@ -16,7 +16,7 @@ import { Link, NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    zIndex:1,
+    zIndex: 1,
     flexGrow: 1,
   },
   menuButton: {
@@ -153,7 +153,9 @@ export default function Header() {
         getContentAnchorEl={null}
       >
         <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
-        <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+        <Link to="/" className={classes.link}>
+          <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+        </Link>
       </Menu>
 
       <Dialog

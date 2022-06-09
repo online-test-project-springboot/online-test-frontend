@@ -2,6 +2,7 @@ import { Slide } from '@material-ui/core';
 import { forwardRef } from 'react';
 
 export const Transition = forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
-  
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+export const getToken = () => JSON.parse(localStorage.getItem('access_token'));

@@ -1,5 +1,4 @@
 import { Box, Container, makeStyles, Typography } from '@material-ui/core';
-import topicApi from 'api/topicApi';
 import TopicList from 'features/Topic/components/TopicList';
 import React, { useEffect, useState } from 'react';
 
@@ -17,7 +16,29 @@ function ListPage(props) {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await topicApi.getAll();
+        // const { data } = await topicApi.getAll();
+        const data = [
+          {
+            createdDate: '6/9/2022',
+            name: 'Toán',
+            description: 'ahahahhahahah',
+          },
+          {
+            createdDate: '6/9/2022',
+            name: 'Toán',
+            description: 'ahahahhahahah',
+          },
+          {
+            createdDate: '6/9/2022',
+            name: 'Toán',
+            description: 'ahahahhahahah',
+          },
+          {
+            createdDate: '6/9/2022',
+            name: 'Toán',
+            description: 'ahahahhahahah',
+          },
+        ];
 
         setTopicList(data);
       } catch (error) {
