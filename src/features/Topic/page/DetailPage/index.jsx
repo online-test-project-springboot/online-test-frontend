@@ -6,12 +6,16 @@ import {
   DialogContent,
   IconButton,
   makeStyles,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
+import questionApi from 'api/questionApi';
 import AddQuestion from 'features/Topic/components/AddQuestion';
 import QuestionList from 'features/Topic/components/QuestionList';
+import { useSnackbar } from 'notistack';
 import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 DetailPage.propTypes = {};
 const useStyles = makeStyles((theme) => ({
@@ -61,6 +65,9 @@ const useStyles = makeStyles((theme) => ({
 function DetailPage(props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [questionList, setQuestionList] = useState([]);
+  const { topicId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleClose = (event, reason) => {
     if (reason !== 'backdropClick') {
@@ -71,46 +78,86 @@ function DetailPage(props) {
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const data = {
-    name: 'Toán cao cấp A1',
-    listQuestion: [
-      {
-        id: 1,
-        thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        img: '',
-        trueAnswer: 'A',
-      },
-      {
-        id: 2,
-        thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        img: '',
-        trueAnswer: 'A',
-      },
-      {
-        id: 3,
-        thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        img: '',
-        trueAnswer: 'A',
-      },
-      {
-        id: 4,
-        thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        img: '',
-        trueAnswer: 'A',
-      },
-      {
-        id: 5,
-        thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        img: '',
-        trueAnswer: 'A',
-      },
-      {
-        id: 6,
-        thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        img: '',
-        trueAnswer: 'A',
-      },
-    ],
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await questionApi.getAll(topicId);
+
+        // const data = {
+        //   name: 'Toán cao cấp A1',
+        //   listQuestion: [
+        //     {
+        //       id: 1,
+        //       thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
+        //       img: '',
+        //       trueAnswer: 'A',
+        //     },
+        //     {
+        //       id: 2,
+        //       thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
+        //       img: '',
+        //       trueAnswer: 'A',
+        //     },
+        //     {
+        //       id: 3,
+        //       thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
+        //       img: '',
+        //       trueAnswer: 'A',
+        //     },
+        //     {
+        //       id: 4,
+        //       thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
+        //       img: '',
+        //       trueAnswer: 'A',
+        //     },
+        //     {
+        //       id: 5,
+        //       thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
+        //       img: '',
+        //       trueAnswer: 'A',
+        //     },
+        //     {
+        //       id: 6,
+        //       thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
+        //       img: '',
+        //       trueAnswer: 'A',
+        //     },
+        //   ],
+        // };
+
+        setQuestionList(data);
+      } catch (error) {
+        console.log('Failed to fetch question list', error);
+      }
+    })();
+  }, []);
+
+  const handleRemove = async (code) => {
+    try {
+      const response = await questionApi.delete(topicId, code);
+      const { data } = await questionApi.getAll(topicId);
+
+      setQuestionList(data);
+
+      enqueueSnackbar(response.message, { variant: 'success', autoHideDuration: 1000 });
+    } catch (error) {
+      console.log('Failed to remove question: ', error);
+      enqueueSnackbar(error.message, { variant: 'error', autoHideDuration: 1000 });
+    }
+  };
+
+  const handleAddQuestion = async () => {
+    try {
+      const { message, data } = await questionApi.getAll(topicId);
+
+      setQuestionList(data);
+
+      enqueueSnackbar(message, { variant: 'success', autoHideDuration: 1000 });
+    } catch (error) {
+      console.log('Failed to  fetch question list: ', error);
+      enqueueSnackbar(error.message, { variant: 'error', autoHideDuration: 1000 });
+    }
   };
 
   return (
@@ -118,10 +165,10 @@ function DetailPage(props) {
       <Container>
         <Box className={classes.row}>
           <Typography className={classes.title} variant="h3">
-            Danh sách chủ đề |
+            Danh sách câu hỏi |
           </Typography>
           <Box className={classes.nameTopic}>
-            <Typography variant="subtitle1">CHỦ ĐỀ: {data.name.toUpperCase()}</Typography>
+            <Typography variant="subtitle1">CHỦ ĐỀ: {'Toán'.toUpperCase()}</Typography>
           </Box>
           <Button
             size="small"
@@ -132,7 +179,7 @@ function DetailPage(props) {
             <Typography variant="subtitle2">+ Thêm câu hỏi mới</Typography>
           </Button>
         </Box>
-        <QuestionList data={data.listQuestion} />
+        <QuestionList handleRemove={handleRemove} data={questionList} />
       </Container>
 
       <Dialog
@@ -147,7 +194,7 @@ function DetailPage(props) {
           <Close />
         </IconButton>
         <DialogContent>
-          <AddQuestion closeDialog={handleClose} />
+          <AddQuestion handleAddQuestion={handleAddQuestion} closeDialog={handleClose} />
         </DialogContent>
       </Dialog>
     </Box>

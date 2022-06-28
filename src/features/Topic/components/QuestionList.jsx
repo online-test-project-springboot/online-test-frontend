@@ -8,27 +8,26 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import questionApi from 'api/questionApi';
 import DialogQuestion from 'components/DialogQuestion';
 import DialogRemove from 'components/DialogRemove';
 import { contentRemoveQuestion } from 'constants/content';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Transition } from 'utils';
 import AddQuestion from './AddQuestion';
 
 QuestionList.propTypes = {
   data: PropTypes.array,
+  handleRemove: PropTypes.func,
 };
 
 const columns = [
-  { id: 'thread', label: 'Đề bài', minWidth: 100 },
+  { code: 'code', id: 'content', label: 'Đề bài', minWidth: 100 },
   {
-    id: 'img',
-    label: 'Hình ảnh',
-    minWidth: 100,
-  },
-  {
-    id: 'trueAnswer',
+    code: 'code',
+    id: 'rightAnswer',
     label: 'Đáp án đúng',
     minWidth: 20,
     align: 'center',
@@ -50,12 +49,19 @@ const MODE = {
   DETAIL: 'detail',
 };
 
-function QuestionList({ data = [] }) {
+function findRightAnswer(answers) {
+  return answers.rightAnswer === true;
+}
+
+function QuestionList({ data = [], handleRemove = null }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(MODE.DETAIL);
+  let [deleteCode, setDeleteCode] = useState('');
+  const { topicId } = useParams();
+  const [detailQuestion, setDetailQuestion] = useState({});
 
   const handleChangePage = (event, newPage) => {
     console.log(newPage);
@@ -67,15 +73,23 @@ function QuestionList({ data = [] }) {
     setPage(0);
   };
 
-  const handleClickOpenRemove = () => {
+  const handleClickOpenRemove = (code) => {
+    setDeleteCode(code);
     setOpen(true);
     setMode(MODE.REMOVE);
   };
 
-  const handleClickOpenDetail = () => {
-    setOpen(true);
-    setMode(MODE.DETAIL);
+  const handleClickOpenDetail = async (code) => {
+    try {
+      const response = await questionApi.getById(topicId, code);
+      if (response.message) {
+        setDetailQuestion(response.data);
+        setOpen(true);
+        setMode(MODE.DETAIL);
+      }
+    } catch (error) {}
   };
+  console.log(detailQuestion);
 
   const handleClickOpenEdit = () => {
     setOpen(true);
@@ -84,6 +98,10 @@ function QuestionList({ data = [] }) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleRemoveQuestion = () => {
+    if (handleRemove) handleRemove(deleteCode);
   };
 
   return (
@@ -96,7 +114,11 @@ function QuestionList({ data = [] }) {
                 STT
               </TableCell>
               {columns.map((column) => (
-                <TableCell key={column.id} style={{ minWidth: column.minWidth }}>
+                <TableCell
+                  key={column.id}
+                  style={{ minWidth: column.minWidth }}
+                  align={column.align}
+                >
                   {column.label}
                 </TableCell>
               ))}
@@ -110,21 +132,21 @@ function QuestionList({ data = [] }) {
             {data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((question, index) => {
+                // console.log(question.answers.find(findRightAnswer).content);
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={question.id}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={question.code}>
                     <TableCell key={index}>{page * rowsPerPage + index + 1}</TableCell>
-                    {columns.map((column) => {
-                      const value = question[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {value}
-                        </TableCell>
-                      );
-                    })}
+                    <TableCell key="content">{question.content}</TableCell>
+                    <TableCell key="rightAnswer" align="center">
+                      {question.answers.find(findRightAnswer)
+                        ? question.answers.find(findRightAnswer).content
+                        : ''}
+                    </TableCell>
+
                     <TableCell key="action" align="center">
-                      <Button onClick={handleClickOpenDetail}>Xem</Button>
+                      <Button onClick={() => handleClickOpenDetail(question.code)}>Xem</Button>
                       <Button onClick={handleClickOpenEdit}>Sửa</Button>
-                      <Button onClick={handleClickOpenRemove}>Xóa</Button>
+                      <Button onClick={() => handleClickOpenRemove(question.code)}>Xóa</Button>
                     </TableCell>
                   </TableRow>
                 );
@@ -150,13 +172,17 @@ function QuestionList({ data = [] }) {
       >
         {mode === MODE.REMOVE && (
           <>
-            <DialogRemove contentRemove={contentRemoveQuestion} closeDialog={handleClose} />
+            <DialogRemove
+              onClickRemove={handleRemoveQuestion}
+              contentRemove={contentRemoveQuestion}
+              closeDialog={handleClose}
+            />
           </>
         )}
 
         {mode === MODE.DETAIL && (
           <>
-            <DialogQuestion closeDialog={handleClose} />
+            <DialogQuestion data={detailQuestion} closeDialog={handleClose} />
           </>
         )}
 
