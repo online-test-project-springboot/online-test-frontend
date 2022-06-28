@@ -27,7 +27,7 @@ function TopicFeature(props) {
         <Route path={match.path} component={ListPage} exact />
         <Route path={`${match.path}/add`} component={AddEditPage} />
         <Route path={`${match.path}/edit/:topicId`} component={AddEditPage} />
-        <Route path={`${match.path}/detail/:topicId`} component={DetailPage} />
+        <Route path={`${match.path}/:topicId/questions`} component={DetailPage} />
       </Switch>
     </Box>
   );

@@ -7,12 +7,13 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DialogRemove from 'components/DialogRemove';
 import { contentRemoveTopic } from 'constants';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { Transition } from 'utils';
 
 Topic.propTypes = {
   topic: PropTypes.object,
+  handleRemove: PropTypes.func,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -51,7 +52,7 @@ function trucateText(text, maxLength) {
 }
 const ITEM_HEIGHT = 48;
 
-function Topic({ topic = {} }) {
+function Topic({ topic = {}, handleRemove = null }) {
   const classes = useStyles();
   const match = useRouteMatch();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -73,6 +74,10 @@ function Topic({ topic = {} }) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleRemoveTopic = () => {
+    if (handleRemove) handleRemove(topic.code);
   };
 
   return (
@@ -116,7 +121,7 @@ function Topic({ topic = {} }) {
           </MenuItem>
         </Menu>
 
-        <Link className={classes.link} to={`${match.path}/detail/${topic.code}`}>
+        <Link className={classes.link} to={`${match.path}/${topic.code}/questions`}>
           <Typography className={classes.title} variant="h5" component="h2">
             {topic.name ? trucateText(topic.name, 18) : 'Update'}
           </Typography>
@@ -134,7 +139,11 @@ function Topic({ topic = {} }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogRemove contentRemove={contentRemoveTopic} closeDialog={handleClose} />
+        <DialogRemove
+          onClickRemove={handleRemoveTopic}
+          contentRemove={contentRemoveTopic}
+          closeDialog={handleClose}
+        />
       </Dialog>
     </Card>
   );

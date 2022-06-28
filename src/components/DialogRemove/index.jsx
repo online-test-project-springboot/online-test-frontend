@@ -9,28 +9,25 @@ import React from 'react';
 DialogRemove.propTypes = {
   closeDialog: PropTypes.func,
   contentRemove: PropTypes.object,
+  onClickRemove: PropTypes.func,
 };
 
-function DialogRemove({ closeDialog = null, contentRemove = {} }) {
+function DialogRemove({ closeDialog = null, contentRemove = {}, onClickRemove = null }) {
   const handleClose = () => {
-    if (closeDialog) {
-      closeDialog();
-    }
+    if (closeDialog) closeDialog();
   };
 
   const handleRemove = () => {
-    //call Api
-    if (closeDialog) {
-      closeDialog();
-    }
+    if (onClickRemove) onClickRemove();
+    if (closeDialog) closeDialog();
   };
 
   return (
     <div>
-      <DialogTitle id="alert-dialog-title">{contentRemove.TITLE  ||''}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{contentRemove.TITLE || ''}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {contentRemove.DESCRIPTION ||''}
+          {contentRemove.DESCRIPTION || ''}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

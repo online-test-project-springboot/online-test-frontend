@@ -7,6 +7,7 @@ import Topic from './Topic';
 
 TopicList.propTypes = {
   data: PropTypes.array,
+  handleRemove: PropTypes.func,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TopicList({ data = [] }) {
+function TopicList({ data = [], handleRemove = null }) {
   const classes = useStyles();
   const match = useRouteMatch();
 
@@ -52,7 +53,7 @@ function TopicList({ data = [] }) {
         </Grid>
         {data.map((topic, index) => (
           <Grid item key={topic.code}>
-            <Topic topic={topic} />
+            <Topic handleRemove={handleRemove} topic={topic} />
           </Grid>
         ))}
       </Grid>
