@@ -3,6 +3,7 @@ import topicApi from 'api/topicApi';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { trimData } from 'utils';
 import AddEditForm from '../AddEditTopicForm';
 
 AddEditTopic.propTypes = {};
@@ -26,12 +27,13 @@ function AddEditTopic(props) {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (values) => {
+    const convertValues = trimData(values);
     try {
       let response;
       if (isAddMode) {
-        response = await topicApi.create(values);
+        response = await topicApi.create(convertValues);
       } else {
-        response = await topicApi.update(topicId, values);
+        response = await topicApi.update(topicId, convertValues);
       }
 
       enqueueSnackbar(response.message, { variant: 'success', autoHideDuration: 1000 });
@@ -50,8 +52,8 @@ function AddEditTopic(props) {
     (async () => {
       try {
         if (!isAddMode) {
-          // const { data } = await topicApi.getById(topicId);
-          const data = { name: 'Pham minh Nguyen', description: 'Hahahahah' };
+          const { data } = await topicApi.getById(topicId);
+
           setDataTopic(data);
         }
       } catch (error) {
@@ -63,7 +65,7 @@ function AddEditTopic(props) {
   return (
     <div>
       <Typography className={classes.title} variant="h3">
-        {topicId === 'create' ? 'Tạo chủ đề thi' : 'Chỉnh sửa chủ đề thi'}
+        {isAddMode ? 'Tạo chủ đề thi' : 'Chỉnh sửa chủ đề thi'}
       </Typography>
       <AddEditForm data={dataTopic} onSubmit={handleSubmit} />
     </div>
