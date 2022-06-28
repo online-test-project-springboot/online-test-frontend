@@ -75,25 +75,22 @@ function AddQuestionForm(props) {
   const classes = useStyles();
 
   const schema = yup.object().shape({
-    question: yup.string().required('Please enter your question.'),
+    content: yup.string().required('Please enter your question.'),
 
     answer1: yup.string().required('Please enter your answer.'),
-    answer2: yup.string().required('Please enter your answer.'),
-    answer3: yup.string().required('Please enter your answer.'),
-    answer4: yup.string().required('Please enter your answer.'),
-    // trueAnswer: yup.,
-
-    // password: yup.string().required('Please enter your password.'),
+    // answer2: yup.string().required('Please enter your answer.'),
+    // answer3: yup.string().required('Please enter your answer.'),
+    // answer4: yup.string().required('Please enter your answer.'),
   });
 
   const form = useForm({
     defaultValues: {
-      question: '',
+      content: '',
       answer1: '',
       answer2: '',
       answer3: '',
       answer4: '',
-      trueAnswer: 'A',
+      trueAnswer: 'answer1',
     },
     resolver: yupResolver(schema),
   });
@@ -121,6 +118,13 @@ function AddQuestionForm(props) {
     { name: 'answer4', label: 'Đáp án 4' },
   ];
 
+  const selectList = [
+    { value: 'answer1', text: 'Đáp án 1' },
+    { value: 'answer2', text: 'Đáp án 2' },
+    { value: 'answer3', text: 'Đáp án 3' },
+    { value: 'answer4', text: 'Đáp án 4' },
+  ];
+
   const { isSubmitting } = form.formState;
   return (
     <div className={classes.root}>
@@ -132,7 +136,7 @@ function AddQuestionForm(props) {
 
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <Typography>Câu hỏi</Typography>
-        <InputField name="question" label="Câu hỏi" form={form} />
+        <InputField name="content" label="Câu hỏi" form={form} />
         <Grid container>
           {answerList.map((answer, index) => (
             <Grid item key={index} xs={6}>
@@ -144,14 +148,14 @@ function AddQuestionForm(props) {
           ))}
         </Grid>
 
+        <SelectField
+          selectList={selectList}
+          id="trueAnswer"
+          name="trueAnswer"
+          label="Đáp án đúng"
+          form={form}
+        ></SelectField>
 
-        <SelectField id="trueAnswer" name="trueAnswer" label="Đáp án đúng" form={form}>
-          <MenuItem value="A">A</MenuItem>
-          <MenuItem value="B">B</MenuItem>
-          <MenuItem value="C">C</MenuItem>
-          <MenuItem value="D">D</MenuItem>
-        </SelectField>
-        
         <Button
           disabled={isSubmitting}
           className={classes.submit}
