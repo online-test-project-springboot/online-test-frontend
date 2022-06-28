@@ -7,6 +7,7 @@ import React from 'react';
 
 DialogQuestion.propTypes = {
   closeDialog: PropTypes.func,
+  data: PropTypes.object,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -34,16 +35,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ANSWER_LIST = ['A', 'B', 'C', 'D'];
 
-function DialogQuestion({ closeDialog = null }) {
+function DialogQuestion({ closeDialog = null, data = {} }) {
   const classes = useStyles();
-  const data = {
-    thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-    imgQuest: ques,
-    answerList: ['Đáp án 1', 'Đáp án 2', 'Đáp án 3', 'Đáp án 4'],
-    trueAns: 'Đáp án đúng 1',
-  };
-
-  console.log(ques);
 
   const handleClose = () => {
     if (closeDialog) {
@@ -58,27 +51,28 @@ function DialogQuestion({ closeDialog = null }) {
     }
   };
 
+  console.log(data);
+
   return (
     <Box padding={1} className={classes.root}>
       <Box>
-        <DialogTitle id="alert-dialog-title">Câu hỏi: {data.thread}</DialogTitle>
-        <img className={classes.imgQuestion} src={data.imgQuest} />
+        <DialogTitle id="alert-dialog-title">Câu hỏi: {data.content}</DialogTitle>
       </Box>
 
       <DialogContent>
         <Grid container className={classes.answer}>
-          {data.answerList.map((answer, index) => (
+          {data.answers.map((answer, index) => (
             <Grid className={classes.item} item key={index} xs={6}>
               <Typography variant="subtitle2">
                 {' '}
-                {ANSWER_LIST[index]}. {answer}
+                {ANSWER_LIST[index]}. {answer.content}
               </Typography>
             </Grid>
           ))}
         </Grid>
 
         <Typography className={classes.trueAnswer} variant="subtitle2">
-          {data.trueAns}
+          Đáp án đúng: {data.answers.find((elm) => elm.rightAnswer).content}
         </Typography>
       </DialogContent>
     </Box>
