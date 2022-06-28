@@ -4,8 +4,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
- 
-
   elementHome: {
     position: 'absolute',
     top: '50%',
@@ -24,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '12px',
     borderRadius: '20px',
     border: '0.5px solid white',
-    color:'#000000de',
-    font:'sans-serif',
+    color: '#000000de',
+    font: 'sans-serif',
   },
 }));
 
@@ -39,17 +37,18 @@ function HomeFeature(props) {
   };
   return (
     <div className={classes.root}>
-      
-
       <Box className={classes.elementHome}>
         <Typography variant="h6">THI TRẮC NGHIỆM ONLINE</Typography>
         <Typography variant="subtitle1">Trang web thi trắc nghiệm online</Typography>
         <Button className={classes.loginBtn} color="inherit">
           Tham gia thi
         </Button>
-        <Button className={classes.loginBtn} color="inherit">
-          Tạo đề thi
-        </Button>
+        <NavLink to="/examQuestion-list" className={classes.link}>
+          <Button className={classes.loginBtn} color="inherit">
+            Tạo đề thi
+          </Button>
+        </NavLink>
+
         <NavLink to="/topic-list" className={classes.link}>
           <Button onClick={handleDirect} className={classes.loginBtn} color="inherit">
             Tạo chủ đề
