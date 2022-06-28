@@ -16,8 +16,7 @@ function Register(props) {
 
   const handleSubmit = async (values) => {
     try {
-      values.username = values.email;
-
+      delete values.retypePassword;
       const action = register(values);
       const resultAction = await dispatch(action);
       unwrapResult(resultAction);
