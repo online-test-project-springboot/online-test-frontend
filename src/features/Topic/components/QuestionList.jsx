@@ -13,7 +13,7 @@ import DialogQuestion from 'components/DialogQuestion';
 import DialogRemove from 'components/DialogRemove';
 import { contentRemoveQuestion } from 'constants/content';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Transition } from 'utils';
 import AddQuestion from './AddQuestion';
@@ -89,7 +89,6 @@ function QuestionList({ data = [], handleRemove = null }) {
       }
     } catch (error) {}
   };
-  console.log(detailQuestion);
 
   const handleClickOpenEdit = () => {
     setOpen(true);
@@ -132,7 +131,6 @@ function QuestionList({ data = [], handleRemove = null }) {
             {data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((question, index) => {
-                // console.log(question.answers.find(findRightAnswer).content);
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={question.code}>
                     <TableCell key={index}>{page * rowsPerPage + index + 1}</TableCell>

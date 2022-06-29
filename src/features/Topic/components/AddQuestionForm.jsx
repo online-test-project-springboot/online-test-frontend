@@ -1,10 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Grid, LinearProgress, MenuItem, Typography } from '@material-ui/core';
+import { Button, Grid, LinearProgress, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import InputField from 'components/Form-controls/InputField';
 import SelectField from 'components/Form-controls/SelectField';
 import PropTypes from 'prop-types';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -77,10 +76,16 @@ function AddQuestionForm(props) {
   const schema = yup.object().shape({
     content: yup.string().required('Please enter your question.'),
 
-    answer1: yup.string().required('Please enter your answer.'),
-    // answer2: yup.string().required('Please enter your answer.'),
-    // answer3: yup.string().required('Please enter your answer.'),
-    // answer4: yup.string().required('Please enter your answer.'),
+    answer1: yup.string(),
+    answer2: yup.string(),
+    answer3: yup.string(),
+    answer4: yup.string(),
+
+    trueAnswer: yup
+      .string()
+      .test('select-option-have-value', 'Please select answer have value', function (selectAnswer) {
+        return !!this.parent[selectAnswer].trim();
+      }),
   });
 
   const form = useForm({

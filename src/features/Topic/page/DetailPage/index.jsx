@@ -13,8 +13,7 @@ import questionApi from 'api/questionApi';
 import AddQuestion from 'features/Topic/components/AddQuestion';
 import QuestionList from 'features/Topic/components/QuestionList';
 import { useSnackbar } from 'notistack';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 DetailPage.propTypes = {};
@@ -65,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 function DetailPage(props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [questionList, setQuestionList] = useState([]);
+  const [questionList, setQuestionList] = useState({});
   const { topicId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -149,11 +148,9 @@ function DetailPage(props) {
 
   const handleAddQuestion = async () => {
     try {
-      const { message, data } = await questionApi.getAll(topicId);
+      const { data } = await questionApi.getAll(topicId);
 
       setQuestionList(data);
-
-      enqueueSnackbar(message, { variant: 'success', autoHideDuration: 1000 });
     } catch (error) {
       console.log('Failed to  fetch question list: ', error);
       enqueueSnackbar(error.message, { variant: 'error', autoHideDuration: 1000 });
@@ -168,7 +165,7 @@ function DetailPage(props) {
             Danh sách câu hỏi |
           </Typography>
           <Box className={classes.nameTopic}>
-            <Typography variant="subtitle1">CHỦ ĐỀ: {'Toán'.toUpperCase()}</Typography>
+            <Typography variant="subtitle1">CHỦ ĐỀ: {questionList.name?.toUpperCase()}</Typography>
           </Box>
           <Button
             size="small"
@@ -179,7 +176,7 @@ function DetailPage(props) {
             <Typography variant="subtitle2">+ Thêm câu hỏi mới</Typography>
           </Button>
         </Box>
-        <QuestionList handleRemove={handleRemove} data={questionList} />
+        <QuestionList handleRemove={handleRemove} data={questionList.questions} />
       </Container>
 
       <Dialog

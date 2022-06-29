@@ -2,9 +2,7 @@ import { FormHelperText } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-import { CloudSharp } from '@material-ui/icons';
 import PropTypes from 'prop-types';
-import React from 'react';
 import { Controller } from 'react-hook-form';
 
 SelectField.propTypes = {
@@ -22,7 +20,7 @@ function SelectField(props) {
   const hasError = !!errors[name];
 
   return (
-    <FormControl variant="outlined" margin="normal" fullWidth>
+    <FormControl variant="outlined" margin="normal" fullWidth error={hasError}>
       {label && <InputLabel htmlFor={`${name}-select`}>{label}</InputLabel>}
       <Controller
         control={form.control}
