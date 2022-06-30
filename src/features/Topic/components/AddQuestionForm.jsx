@@ -26,6 +26,13 @@ const useStyles = makeStyles((theme) => ({
 
   submit: {
     margin: theme.spacing(3, 0, 2, 0),
+    width: '15%',
+    marginLeft: '23%',
+  },
+
+  btnSave: {
+    background: '#57c6ae',
+    color: 'white',
   },
 
   progress: {
@@ -174,7 +181,7 @@ function AddQuestionForm({ onSubmit = null, closeDialog = null, detailQuestion =
           disabled={isSubmitting}
           className={classes.submit}
           onClick={handleClose}
-          color="primary"
+          color="inherit"
           variant="contained"
           size="medium"
         >
@@ -183,8 +190,7 @@ function AddQuestionForm({ onSubmit = null, closeDialog = null, detailQuestion =
         <Button
           disabled={isSubmitting}
           type="submit"
-          className={classes.submit}
-          color="primary"
+          className={`${classes.submit} ${classes.btnSave}`}
           variant="contained"
           size="medium"
         >

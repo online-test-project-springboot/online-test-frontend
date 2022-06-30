@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Transition } from 'utils';
 import AddQuestion from './AddQuestion';
+import { trucateText } from 'utils';
 
 QuestionList.propTypes = {
   data: PropTypes.array,
@@ -42,6 +43,25 @@ const useStyles = makeStyles({
   },
   container: {
     maxHeight: 440,
+  },
+
+  btn: {
+    border: '1px solid',
+    borderRadius: '25px',
+    marginLeft: '20px',
+    color: 'white',
+  },
+
+  btnCell: {
+    '&>:nth-child(1)': {
+      background: '#52d2f1',
+    },
+    '&>:nth-child(2)': {
+      background: '#f29423',
+    },
+    '&>:nth-child(3)': {
+      background: '#d62930',
+    },
   },
 });
 const MODE = {
@@ -142,20 +162,36 @@ function QuestionList({ data = [], handleRemove = null, handleAddUpdateQuestion 
             {data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((question, index) => {
+                const rightAnswer = question.answers.find(findRightAnswer)
+                  ? question.answers.find(findRightAnswer).content
+                  : '';
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={question.code}>
                     <TableCell key={index}>{page * rowsPerPage + index + 1}</TableCell>
-                    <TableCell key="content">{question.content}</TableCell>
+                    <TableCell key="content">{trucateText(question.content, 35)}</TableCell>
                     <TableCell key="rightAnswer" align="center">
-                      {question.answers.find(findRightAnswer)
-                        ? question.answers.find(findRightAnswer).content
-                        : ''}
+                      {trucateText(rightAnswer, 15)}
                     </TableCell>
 
-                    <TableCell key="action" align="center">
-                      <Button onClick={() => handleClickOpenDetail(question.code)}>Xem</Button>
-                      <Button onClick={() => handleClickOpenEdit(question.code)}>Sửa</Button>
-                      <Button onClick={() => handleClickOpenRemove(question.code)}>Xóa</Button>
+                    <TableCell className={classes.btnCell} key="action" align="center">
+                      <Button
+                        className={classes.btn}
+                        onClick={() => handleClickOpenDetail(question.code)}
+                      >
+                        Xem
+                      </Button>
+                      <Button
+                        className={classes.btn}
+                        onClick={() => handleClickOpenEdit(question.code)}
+                      >
+                        Sửa
+                      </Button>
+                      <Button
+                        className={classes.btn}
+                        onClick={() => handleClickOpenRemove(question.code)}
+                      >
+                        Xóa
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );

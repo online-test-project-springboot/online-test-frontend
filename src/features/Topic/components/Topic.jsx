@@ -9,7 +9,7 @@ import { contentRemoveTopic } from 'constants';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
-import { Transition } from 'utils';
+import { Transition, trucateText } from 'utils';
 
 Topic.propTypes = {
   topic: PropTypes.object,
@@ -45,11 +45,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function trucateText(text, maxLength) {
-  if (text.length <= maxLength) return text;
-
-  return `${text.slice(0, maxLength - 1)}…`;
-}
 const ITEM_HEIGHT = 48;
 
 function Topic({ topic = {}, handleRemove = null }) {
