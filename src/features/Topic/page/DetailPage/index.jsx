@@ -146,7 +146,7 @@ function DetailPage(props) {
     }
   };
 
-  const handleAddQuestion = async () => {
+  const handleAddUpdateQuestion = async () => {
     try {
       const { data } = await questionApi.getAll(topicId);
 
@@ -176,7 +176,11 @@ function DetailPage(props) {
             <Typography variant="subtitle2">+ Thêm câu hỏi mới</Typography>
           </Button>
         </Box>
-        <QuestionList handleRemove={handleRemove} data={questionList.questions} />
+        <QuestionList
+          handleAddUpdateQuestion={handleAddUpdateQuestion}
+          handleRemove={handleRemove}
+          data={questionList.questions}
+        />
       </Container>
 
       <Dialog
@@ -191,7 +195,10 @@ function DetailPage(props) {
           <Close />
         </IconButton>
         <DialogContent>
-          <AddQuestion handleAddQuestion={handleAddQuestion} closeDialog={handleClose} />
+          <AddQuestion
+            handleAddUpdateQuestion={handleAddUpdateQuestion}
+            closeDialog={handleClose}
+          />
         </DialogContent>
       </Dialog>
     </Box>

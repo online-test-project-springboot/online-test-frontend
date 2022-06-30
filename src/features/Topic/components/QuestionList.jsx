@@ -21,6 +21,7 @@ import AddQuestion from './AddQuestion';
 QuestionList.propTypes = {
   data: PropTypes.array,
   handleRemove: PropTypes.func,
+  handleUpdateQuestion: PropTypes.func,
 };
 
 const columns = [
@@ -53,7 +54,7 @@ function findRightAnswer(answers) {
   return answers.rightAnswer === true;
 }
 
-function QuestionList({ data = [], handleRemove = null }) {
+function QuestionList({ data = [], handleRemove = null, handleAddUpdateQuestion = null }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -87,12 +88,22 @@ function QuestionList({ data = [], handleRemove = null }) {
         setOpen(true);
         setMode(MODE.DETAIL);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log('Failed to fetch detail question:', error.message);
+    }
   };
 
-  const handleClickOpenEdit = () => {
-    setOpen(true);
-    setMode(MODE.EDIT);
+  const handleClickOpenEdit = async (code) => {
+    try {
+      const response = await questionApi.getById(topicId, code);
+      if (response.message) {
+        setDetailQuestion(response.data);
+        setOpen(true);
+        setMode(MODE.EDIT);
+      }
+    } catch (error) {
+      console.log('Failed to fetch detail question:', error.message);
+    }
   };
 
   const handleClose = () => {
@@ -143,7 +154,7 @@ function QuestionList({ data = [], handleRemove = null }) {
 
                     <TableCell key="action" align="center">
                       <Button onClick={() => handleClickOpenDetail(question.code)}>Xem</Button>
-                      <Button onClick={handleClickOpenEdit}>Sửa</Button>
+                      <Button onClick={() => handleClickOpenEdit(question.code)}>Sửa</Button>
                       <Button onClick={() => handleClickOpenRemove(question.code)}>Xóa</Button>
                     </TableCell>
                   </TableRow>
@@ -186,7 +197,11 @@ function QuestionList({ data = [], handleRemove = null }) {
 
         {mode === MODE.EDIT && (
           <>
-            <AddQuestion closeDialog={handleClose} />
+            <AddQuestion
+              data={detailQuestion}
+              handleAddUpdateQuestion={handleAddUpdateQuestion}
+              closeDialog={handleClose}
+            />
           </>
         )}
       </Dialog>

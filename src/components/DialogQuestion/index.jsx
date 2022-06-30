@@ -51,8 +51,6 @@ function DialogQuestion({ closeDialog = null, data = {} }) {
     }
   };
 
-  console.log(data);
-
   return (
     <Box padding={1} className={classes.root}>
       <Box>

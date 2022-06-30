@@ -1,12 +1,14 @@
 import questionApi from 'api/questionApi';
 import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import AddQuestionForm from './AddQuestionForm';
 
 AddQuestion.propTypes = {
   closeDialog: PropTypes.func,
-  handleAddQuestion: PropTypes.func,
+  handleAddUpdateQuestion: PropTypes.func,
+  data: PropTypes.object,
 };
 
 function convertData(values) {
@@ -17,14 +19,14 @@ function convertData(values) {
     answers: [],
   };
 
-  payload.content = values.content;
+  payload.content = values.content.trim();
 
   delete values.content;
 
   for (const key in values) {
     if (values[key]) {
       const ansObj = {
-        content: values[key],
+        content: values[key].trim(),
       };
 
       if (key === values.trueAnswer) {
@@ -39,30 +41,38 @@ function convertData(values) {
   return payload;
 }
 
-function AddQuestion({ closeDialog = null, handleAddQuestion = null }) {
+function AddQuestion({ closeDialog = null, handleAddUpdateQuestion = null, data = {} }) {
   const { enqueueSnackbar } = useSnackbar();
   const { topicId } = useParams();
+  const isAddMode = Object.keys(data).length === 0;
 
   const handleSubmit = async (values) => {
     const payload = convertData(values);
 
     try {
-      const { message } = await questionApi.create(topicId, payload);
+      let response;
+      if (isAddMode) {
+        response = await questionApi.create(topicId, payload);
+      } else {
+        response = await questionApi.update(topicId, data.code, payload);
+      }
 
-      if (message) {
-        enqueueSnackbar(message, { variant: 'success', autoHideDuration: 1000 });
+      if (response.message) {
+        enqueueSnackbar(response.message, { variant: 'success', autoHideDuration: 1000 });
         closeDialog();
-        if (handleAddQuestion) handleAddQuestion();
+        if (handleAddUpdateQuestion) {
+          handleAddUpdateQuestion();
+        }
       }
     } catch (error) {
-      console.log('Failed to create question:', error);
+      console.log('Failed to create or update question:', error);
       enqueueSnackbar(error.message, { variant: 'error', autoHideDuration: 1000 });
     }
   };
 
   return (
     <div>
-      <AddQuestionForm closeDialog={closeDialog} onSubmit={handleSubmit} />
+      <AddQuestionForm detailQuestion={data} closeDialog={closeDialog} onSubmit={handleSubmit} />
     </div>
   );
 }

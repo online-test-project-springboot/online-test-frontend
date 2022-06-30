@@ -3,7 +3,6 @@ import axiosClient from './axiosClient';
 
 const questionApi = {
   create(topicCode, data) {
-    console.log(data);
     const url = `/topics/${topicCode}/questions/create`;
     return axiosClient.put(url, data, { headers: { Authorization: `Bearer ${getToken()}` } });
   },

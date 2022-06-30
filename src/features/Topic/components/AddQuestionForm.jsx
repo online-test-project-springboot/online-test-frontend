@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import InputField from 'components/Form-controls/InputField';
 import SelectField from 'components/Form-controls/SelectField';
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -68,18 +69,14 @@ const useStyles = makeStyles((theme) => ({
 AddQuestionForm.propTypes = {
   onSubmit: PropTypes.func,
   closeDialog: PropTypes.func,
+  detailQuestion: PropTypes.object,
 };
 
-function AddQuestionForm(props) {
+function AddQuestionForm({ onSubmit = null, closeDialog = null, detailQuestion = {} }) {
   const classes = useStyles();
 
   const schema = yup.object().shape({
     content: yup.string().required('Please enter your question.'),
-
-    answer1: yup.string(),
-    answer2: yup.string(),
-    answer3: yup.string(),
-    answer4: yup.string(),
 
     trueAnswer: yup
       .string()
@@ -101,16 +98,12 @@ function AddQuestionForm(props) {
   });
 
   const handleSubmit = async (values) => {
-    const { onSubmit } = props;
-
     if (onSubmit) {
       await onSubmit(values);
     }
   };
 
   const handleClose = () => {
-    const { closeDialog } = props;
-
     if (closeDialog) {
       closeDialog();
     }
@@ -130,13 +123,29 @@ function AddQuestionForm(props) {
     { value: 'answer4', text: 'Đáp án 4' },
   ];
 
+  useEffect(() => {
+    if (typeof detailQuestion !== 'object' || Object.keys(detailQuestion).length === 0) return;
+
+    const { content, answers } = detailQuestion;
+    form.setValue('content', content);
+
+    const fieldList = ['answer1', 'answer2', 'answer3', 'answer4'];
+    answers.forEach((answer, index) => {
+      if (answer.rightAnswer) {
+        form.setValue('trueAnswer', fieldList[index]);
+      }
+
+      form.setValue(fieldList[index], answer.content);
+    });
+  }, [detailQuestion]);
+
   const { isSubmitting } = form.formState;
   return (
     <div className={classes.root}>
       {isSubmitting && <LinearProgress className={classes.progress} />}
 
       <Typography className={classes.title} component={'h3'} variant={'h5'}>
-        Thêm câu hỏi
+        {Object.keys(detailQuestion).length === 0 ? 'Thêm câu hỏi' : 'Chỉnh sửa câu hỏi'}
       </Typography>
 
       <form onSubmit={form.handleSubmit(handleSubmit)}>
