@@ -1,4 +1,5 @@
 import { Box, makeStyles } from '@material-ui/core';
+import NotFound from 'components/NotFound';
 import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import AddEditPage from './page/AddEditPage';
@@ -25,9 +26,10 @@ function ExamQuestion(props) {
     <Box className={classes.root}>
       <Switch>
         <Route path={match.path} component={ListPage} exact />
-        <Route path={`${match.path}/add`} component={AddEditPage} />
+        <Route path={`${match.path}/add`} exact component={AddEditPage} />
         <Route path={`${match.path}/edit/:topicId`} component={AddEditPage} />
         <Route path={`${match.path}/detail/:topicId`} component={DetailPage} />
+        <Route component={NotFound} />
       </Switch>
     </Box>
   );

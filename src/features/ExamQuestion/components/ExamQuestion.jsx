@@ -10,7 +10,8 @@ import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import UpdateIcon from '@material-ui/icons/Update';
 import DialogRemove from 'components/DialogRemove';
-import { contentRemoveTopic } from 'constants';
+import { contentRemoveExam } from 'constants';
+
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
@@ -141,7 +142,7 @@ function ExamQuestion({ exam = {} }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogRemove contentRemove={contentRemoveTopic} closeDialog={handleClose} />
+        <DialogRemove contentRemove={contentRemoveExam} closeDialog={handleClose} />
       </Dialog>
     </Card>
   );

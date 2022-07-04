@@ -12,7 +12,7 @@ InputField.propTypes = {
 };
 
 function InputField(props) {
-  const { form, name, label, disabled } = props;
+  const { form, name, label, disabled, isTypeNumber } = props;
   const { errors } = form;
   const hasError = !!errors[name];
 
@@ -23,6 +23,7 @@ function InputField(props) {
       as={TextField}
       margin="normal"
       variant="outlined"
+      type={isTypeNumber ? 'number' : 'text'}
       fullWidth
       label={label}
       disabled={disabled}
