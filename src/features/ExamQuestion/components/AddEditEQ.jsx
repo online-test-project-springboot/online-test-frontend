@@ -8,6 +8,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import AddDetailEQ from './AddDetailEQ';
 import AddEditEQForm from './AddEditEQForm';
 import AddInfoEQ from './AddInfoEQ';
+import { trimData } from 'utils';
 
 AddEditEQ.propTypes = {};
 
@@ -17,20 +18,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const MODE = {
+  INFO: 'info',
+  DETAIL: 'detail',
+  LINK: 'link',
+};
+
 function AddEditEQ(props) {
   const classes = useStyles();
 
-  const history = useHistory();
+  const dispatch = useDispatch();
+  const topicList = useSelector((state) => state.topic.topicList);
+
   const { topicId } = useParams();
   const isAddMode = !topicId;
-  const dispatch = useDispatch();
 
-  const topicList = useSelector((state) => state.topic.topicList);
+  const [mode, setMode] = useState(MODE.DETAIL);
+  const [infoValue, setInfoValue] = useState({
+    name: 'Đánh giá năng lực',
+    topicCode: 'Mw==',
+    time: '120',
+    numberQuestion: '3',
+  });
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = async (values) => {
-    console.log(values);
+  const handleInfoSubmit = async (values) => {
+    const convertValues = trimData(values);
+    setInfoValue(convertValues);
+    setMode(MODE.DETAIL);
     // history.push({
     //   pathname: '/',
     // });
@@ -52,26 +68,31 @@ function AddEditEQ(props) {
     // }
   };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        if (typeof topicList === 'object' && topicList.length === 0) {
-          const action = getAllTopic();
-          await dispatch(action);
-        }
-      } catch (error) {
-        console.log('Failed to fetch topic list', error);
-      }
-    })();
-  }, []);
+  const handleDetailSubmit = async (values) => {
+    setMode(MODE.LINK);
+  };
+
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       if (typeof topicList === 'object' && topicList.length === 0) {
+  //         const action = getAllTopic();
+  //         await dispatch(action);
+  //       }
+  //     } catch (error) {
+  //       console.log('Failed to fetch topic list', error);
+  //     }
+  //   })();
+  // }, []);
 
   return (
     <div>
       <Typography className={classes.title} variant="h3">
         {isAddMode ? 'Tạo đề thi' : 'Chỉnh sửa đề thi'}
       </Typography>
-      <AddInfoEQ data={topicList} onSubmit={handleSubmit} />
-      {/* <AddDetailEQ onSubmit={handleSubmit} /> */}
+      {/* {mode === MODE.INFO && <AddInfoEQ data={topicList} onSubmit={handleInfoSubmit} />} */}
+      {mode === MODE.DETAIL && <AddDetailEQ data={infoValue} onSubmit={handleDetailSubmit} />}
+
       {/* <AddEditEQForm data={dataTopic} onSubmit={handleSubmit} /> */}
     </div>
   );
