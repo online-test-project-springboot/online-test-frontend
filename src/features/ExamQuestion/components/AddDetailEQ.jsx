@@ -10,7 +10,6 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import InputField from 'components/Form-controls/InputField';
-import SelectField from 'components/Form-controls/SelectField';
 import TableQuestion from 'features/ExamQuestion/components/TableQuestion';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
@@ -43,89 +42,7 @@ AddDetailEQ.propTypes = {
 
 function AddDetailEQ({ onSubmit = null, data = {} }) {
   const classes = useStyles();
-
-  const schema = yup.object().shape({
-    title: yup.string().required('Please enter your title.'),
-    topic: yup.string().required('Please select topic.'),
-    numberQuestion: yup.string().required('Please select number question.'),
-    time: yup.string().required('Please select exam time.'),
-    questionCodes: yup
-      .array()
-      .length(
-        Number.parseInt(data.numberQuestion),
-        `Please select number of question equal ${data.numberQuestion}`
-      ),
-  });
-
-  const form = useForm({
-    defaultValues: {
-      title: ' ',
-      topic: ' ',
-      numberQuestion: data.numberQuestion,
-      time: data.time,
-      questionCodes: [],
-    },
-    resolver: yupResolver(schema),
-  });
-
-  const handleSubmit = async (values) => {
-    console.log(values);
-    // if (onSubmit) {
-    //   await onSubmit(values);
-    // }
-  };
-
-  const handleClose = () => {};
-
-  const topicList = [
-    { value: '', text: 'Chọn', disabled: true },
-    { value: 'Toán', text: 'Toán' },
-    { value: 'Văn', text: 'Văn' },
-    { value: 'Sinh', text: 'Sinh' },
-    { value: 'Hóa', text: 'Hóa' },
-  ];
-
-  const dataa = {
-    name: 'Toán cao cấp A1',
-    listQuestion: [
-      {
-        id: 1,
-        thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        img: '',
-        trueAnswer: 'A',
-      },
-      {
-        id: 2,
-        thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        img: '',
-        trueAnswer: 'A',
-      },
-      {
-        id: 3,
-        thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        img: '',
-        trueAnswer: 'A',
-      },
-      {
-        id: 4,
-        thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        img: '',
-        trueAnswer: 'A',
-      },
-      {
-        id: 5,
-        thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        img: '',
-        trueAnswer: 'A',
-      },
-      {
-        id: 6,
-        thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        img: '',
-        trueAnswer: 'A',
-      },
-    ],
-  };
+  const { topicCode, time, numberQuestion, dataQuestion } = data;
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -139,6 +56,33 @@ function AddDetailEQ({ onSubmit = null, data = {} }) {
     setPage(0);
   };
 
+  const schema = yup.object().shape({
+    questionCodes: yup
+      .array()
+      .length(
+        Number.parseInt(numberQuestion),
+        `Please select number of question equal ${numberQuestion}`
+      ),
+  });
+
+  const form = useForm({
+    defaultValues: {
+      topicCode: topicCode,
+      numberQuestion: data.numberQuestion,
+      time: time,
+      questionCodes: [],
+    },
+    resolver: yupResolver(schema),
+  });
+
+  const handleSubmit = async (values) => {
+    if (onSubmit) {
+      await onSubmit(values);
+    }
+  };
+
+  const handleClose = () => {};
+
   const { isSubmitting } = form.formState;
   return (
     <div className={classes.root}>
@@ -148,13 +92,7 @@ function AddDetailEQ({ onSubmit = null, data = {} }) {
         <Container>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <Typography>Chọn chủ đề</Typography>
-            <SelectField
-              disabled={true}
-              selectList={topicList}
-              id="topic"
-              name="topic"
-              form={form}
-            ></SelectField>
+            <InputField disabled={true} id="topicCode" name="topicCode" form={form} />
 
             <Typography>Số câu hỏi</Typography>
             <InputField disabled={true} name="numberQuestion" isTypeNumber={true} form={form} />
@@ -162,12 +100,12 @@ function AddDetailEQ({ onSubmit = null, data = {} }) {
             <Typography>Thời gian</Typography>
             <InputField disabled={true} name="time" isTypeNumber={true} form={form} />
 
-            <Typography>Danh sách câu hỏi chủ để: {}</Typography>
+            <Typography>Danh sách câu hỏi chủ để: {dataQuestion.name}</Typography>
             <TableContainer className={classes.container}>
               <TableQuestion
                 page={page}
                 rowsPerPage={rowsPerPage}
-                data={dataa}
+                data={dataQuestion.questions}
                 numberQuestion={data.numberQuestion}
                 id="questionCodes"
                 name="questionCodes"
@@ -177,7 +115,7 @@ function AddDetailEQ({ onSubmit = null, data = {} }) {
             <TablePagination
               rowsPerPageOptions={[5, 10, 20]}
               component="div"
-              count={dataa.listQuestion.length}
+              count={dataQuestion.questions.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

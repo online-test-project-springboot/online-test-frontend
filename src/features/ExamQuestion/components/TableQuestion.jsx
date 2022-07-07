@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TableQuestion(props) {
-  const { form, name, label, disabled, numberQuestion, data, page, rowsPerPage } = props;
+  const { form, name, numberQuestion, data, page, rowsPerPage } = props;
   const { errors } = form;
   const hasError = !!errors[name];
   const classes = useStyles();
@@ -70,26 +70,26 @@ function TableQuestion(props) {
             </caption>
 
             <TableBody>
-              {data.listQuestion
+              {data
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((question, index) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={question.id}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={question.code}>
                       <TableCell key={index}>
                         <Checkbox
                           disabled={
                             value.length === Number.parseInt(numberQuestion) &&
-                            !value.includes(`${question.id}`)
+                            !value.includes(`${question.code}`)
                           }
-                          value={question.id}
+                          value={question.code}
                           color="default"
                           className={classes.root}
-                          checked={value.includes(`${question.id}`)}
+                          checked={value.includes(`${question.code}`)}
                           onChange={(e) => handleChange(e, value, onChange)}
                         />
                       </TableCell>
-                      <TableCell key={question.id}>
-                        {page * rowsPerPage + index + 1}. {question.thread}
+                      <TableCell key={question.code}>
+                        {page * rowsPerPage + index + 1}. {question.content}
                       </TableCell>
 
                       <TableCell key="action" align="center">
@@ -102,9 +102,6 @@ function TableQuestion(props) {
           </Table>
         );
       }}
-      label={label}
-      disabled={disabled}
-      error={hasError}
     />
   );
 }

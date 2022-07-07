@@ -9,6 +9,9 @@ import AddDetailEQ from './AddDetailEQ';
 import AddEditEQForm from './AddEditEQForm';
 import AddInfoEQ from './AddInfoEQ';
 import { trimData } from 'utils';
+import questionApi from 'api/questionApi';
+import { MESSAGES } from 'constants';
+import examApi from 'api/examApi';
 
 AddEditEQ.propTypes = {};
 
@@ -26,71 +29,52 @@ const MODE = {
 
 function AddEditEQ(props) {
   const classes = useStyles();
-
-  const dispatch = useDispatch();
   const topicList = useSelector((state) => state.topic.topicList);
 
   const { topicId } = useParams();
   const isAddMode = !topicId;
 
-  const [mode, setMode] = useState(MODE.DETAIL);
-  const [infoValue, setInfoValue] = useState({
-    name: 'Đánh giá năng lực',
-    topicCode: 'Mw==',
-    time: '120',
-    numberQuestion: '3',
-  });
+  const [mode, setMode] = useState(MODE.INFO);
+  const [infoValue, setInfoValue] = useState({});
 
   const { enqueueSnackbar } = useSnackbar();
 
   const handleInfoSubmit = async (values) => {
-    const convertValues = trimData(values);
-    setInfoValue(convertValues);
-    setMode(MODE.DETAIL);
-    // history.push({
-    //   pathname: '/',
-    // });
-    // try {
-    //   let response;
-    //   if (isAddMode) {
-    //     response = await topicApi.create(values);
-    //   } else {
-    //     response = await topicApi.update(topicId, values);
-    //   }
-    //   enqueueSnackbar(response.message, { variant: 'success', autoHideDuration: 1000 });
-    //   setTimeout(() => {
-    //     history.push({
-    //       pathname: '/topic-list',
-    //     });
-    //   }, 1000);
-    // } catch (error) {
-    //   enqueueSnackbar(error.message, { variant: 'error', autoHideDuration: 2000 });
-    // }
+    try {
+      const convertValues = trimData(values);
+      const response = await questionApi.getAll(convertValues.topicCode);
+      if (response.message === MESSAGES.SUCCESSFULLY) {
+        const dataQuestion = response.data;
+        setInfoValue({ ...convertValues, dataQuestion });
+        setMode(MODE.DETAIL);
+      }
+    } catch (error) {
+      enqueueSnackbar(error.message, { variant: 'error', autoHideDuration: 1000 });
+    }
   };
 
   const handleDetailSubmit = async (values) => {
-    setMode(MODE.LINK);
-  };
+    try {
+      const payload = { ...values, name: infoValue.name };
+      delete payload.numberQuestion;
+      const response = await examApi.create(payload);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       if (typeof topicList === 'object' && topicList.length === 0) {
-  //         const action = getAllTopic();
-  //         await dispatch(action);
-  //       }
-  //     } catch (error) {
-  //       console.log('Failed to fetch topic list', error);
-  //     }
-  //   })();
-  // }, []);
+      if (response.message === MESSAGES.SUCCESSFULLY) {
+        enqueueSnackbar(response.message, { variant: 'success', autoHideDuration: 1000 });
+        // setMode(MODE.LINK);
+      }
+    } catch (error) {
+      console.log('Failed to create exam question', error);
+      enqueueSnackbar(error.message, { variant: 'error', autoHideDuration: 2000 });
+    }
+  };
 
   return (
     <div>
       <Typography className={classes.title} variant="h3">
         {isAddMode ? 'Tạo đề thi' : 'Chỉnh sửa đề thi'}
       </Typography>
-      {/* {mode === MODE.INFO && <AddInfoEQ data={topicList} onSubmit={handleInfoSubmit} />} */}
+      {mode === MODE.INFO && <AddInfoEQ data={topicList} onSubmit={handleInfoSubmit} />}
       {mode === MODE.DETAIL && <AddDetailEQ data={infoValue} onSubmit={handleDetailSubmit} />}
 
       {/* <AddEditEQForm data={dataTopic} onSubmit={handleSubmit} /> */}
