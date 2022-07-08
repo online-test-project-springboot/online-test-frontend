@@ -4,15 +4,16 @@ import ExamQuestion from './ExamQuestion';
 
 ExamQuestionList.propTypes = {
   data: PropTypes.array,
+  handleRemove: PropTypes.func,
 };
 
-function ExamQuestionList({ data = [] }) {
+function ExamQuestionList({ data = [], handleRemove = null }) {
   return (
     <Box margin={3}>
       <Grid container>
         {data.map((exam, index) => (
           <Grid item key={exam.code}>
-            <ExamQuestion exam={exam} />
+            <ExamQuestion handleRemove={handleRemove} exam={exam} />
           </Grid>
         ))}
       </Grid>

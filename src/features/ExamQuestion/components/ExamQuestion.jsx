@@ -19,6 +19,7 @@ import { Transition, trucateText } from 'utils';
 
 ExamQuestion.propTypes = {
   exam: PropTypes.object,
+  handleRemove: PropTypes.func,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -53,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ITEM_HEIGHT = 48;
 
-function ExamQuestion({ exam = {} }) {
+function ExamQuestion({ exam = {}, handleRemove = null }) {
   const classes = useStyles();
   const match = useRouteMatch();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -75,6 +76,10 @@ function ExamQuestion({ exam = {} }) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleRemoveExam = () => {
+    if (handleRemove) handleRemove(exam.code);
   };
 
   return (
@@ -142,7 +147,11 @@ function ExamQuestion({ exam = {} }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogRemove contentRemove={contentRemoveExam} closeDialog={handleClose} />
+        <DialogRemove
+          onClickRemove={handleRemoveExam}
+          contentRemove={contentRemoveExam}
+          closeDialog={handleClose}
+        />
       </Dialog>
     </Card>
   );

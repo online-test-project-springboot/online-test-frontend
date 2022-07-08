@@ -1,6 +1,7 @@
 import { Box, Button, Container, makeStyles, Typography } from '@material-ui/core';
 import examApi from 'api/examApi';
 import ExamQuestionList from 'features/ExamQuestion/components/ExamQuestionList';
+import { useSnackbar } from 'notistack';
 
 import { useEffect, useState } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
@@ -32,56 +33,13 @@ const useStyles = makeStyles((theme) => ({
 function ListPage(props) {
   const classes = useStyles();
   const match = useRouteMatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [examQuestionList, setExamQuestionList] = useState();
   useEffect(() => {
     (async () => {
       try {
         const { data } = await examApi.getAll();
-        // const data = [
-        //   {
-        //     id: 1,
-        //     title: 'Đánh giá năng lực',
-        //     topic: 'Toán Học',
-        //     questionNumber: '30 câu',
-        //     time: '45 phút',
-        //   },
-        //   {
-        //     id: 2,
-        //     title: 'Đánh giá năng lực',
-        //     topic: 'Toán Học',
-        //     questionNumber: '30 câu',
-        //     time: '45 phút',
-        //   },
-        //   {
-        //     id: 3,
-        //     title: 'Đánh giá năng lực',
-        //     topic: 'Toán Học',
-        //     questionNumber: '30 câu',
-        //     time: '45 phút',
-        //   },
-        //   {
-        //     id: 4,
-        //     title: 'Đánh giá năng lực',
-        //     topic: 'Toán Học',
-        //     questionNumber: '30 câu',
-        //     time: '45 phút',
-        //   },
-        //   {
-        //     id: 5,
-        //     title: 'Đánh giá năng lực',
-        //     topic: 'Toán Học',
-        //     questionNumber: '30 câu',
-        //     time: '45 phút',
-        //   },
-        //   {
-        //     id: 6,
-        //     title: 'Đánh giá năng lực',
-        //     topic: 'Toán Học',
-        //     questionNumber: '30 câu',
-        //     time: '45 phút',
-        //   },
-        // ];
 
         setExamQuestionList(data);
       } catch (error) {
@@ -89,6 +47,19 @@ function ListPage(props) {
       }
     })();
   }, []);
+
+  const handleRemove = async (code) => {
+    try {
+      const response = await examApi.delete(code);
+      const { data } = await examApi.getAll();
+      setExamQuestionList(data);
+
+      enqueueSnackbar(response.message, { variant: 'success', autoHideDuration: 1000 });
+    } catch (error) {
+      console.log('Failed to remove topic: ', error);
+      enqueueSnackbar(error.message, { variant: 'error', autoHideDuration: 1000 });
+    }
+  };
   return (
     <Box>
       <Container>
@@ -101,7 +72,7 @@ function ListPage(props) {
           </Button>
         </Link>
 
-        <ExamQuestionList data={examQuestionList} />
+        <ExamQuestionList handleRemove={handleRemove} data={examQuestionList} />
       </Container>
     </Box>
   );
