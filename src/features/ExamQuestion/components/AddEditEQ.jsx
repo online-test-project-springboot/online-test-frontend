@@ -1,17 +1,15 @@
 import { makeStyles, Typography } from '@material-ui/core';
-import topicApi from 'api/topicApi';
-import { getAllTopic } from 'features/Topic/topicSlice';
-import { useSnackbar } from 'notistack';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
-import AddDetailEQ from './AddDetailEQ';
-import AddEditEQForm from './AddEditEQForm';
-import AddInfoEQ from './AddInfoEQ';
-import { trimData } from 'utils';
+import examApi from 'api/examApi';
 import questionApi from 'api/questionApi';
 import { MESSAGES } from 'constants';
-import examApi from 'api/examApi';
+import { useSnackbar } from 'notistack';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { trimData } from 'utils';
+import AddDetailEQ from './AddDetailEQ';
+import AddInfoEQ from './AddInfoEQ';
+import LinkEQ from './LinkEQ';
 
 AddEditEQ.propTypes = {};
 
@@ -36,15 +34,16 @@ function AddEditEQ(props) {
 
   const [mode, setMode] = useState(MODE.INFO);
   const [infoValue, setInfoValue] = useState({});
+  const [detailValue, setDetailValue] = useState({});
 
   const { enqueueSnackbar } = useSnackbar();
 
   const handleInfoSubmit = async (values) => {
     try {
       const convertValues = trimData(values);
-      const response = await questionApi.getAll(convertValues.topicCode);
-      if (response.message === MESSAGES.SUCCESSFULLY) {
-        const dataQuestion = response.data;
+      const { message, data } = await questionApi.getAll(convertValues.topicCode);
+      if (message === MESSAGES.SUCCESSFULLY) {
+        const dataQuestion = data;
         setInfoValue({ ...convertValues, dataQuestion });
         setMode(MODE.DETAIL);
       }
@@ -55,13 +54,13 @@ function AddEditEQ(props) {
 
   const handleDetailSubmit = async (values) => {
     try {
-      const payload = { ...values, name: infoValue.name };
-      delete payload.numberQuestion;
-      const response = await examApi.create(payload);
+      const { message, data } = await examApi.create(values);
 
-      if (response.message === MESSAGES.SUCCESSFULLY) {
-        enqueueSnackbar(response.message, { variant: 'success', autoHideDuration: 1000 });
-        // setMode(MODE.LINK);
+      if (message === MESSAGES.SUCCESSFULLY) {
+        enqueueSnackbar(message, { variant: 'success', autoHideDuration: 1000 });
+        const infoExam = { name: data.name, code: data.code };
+        setDetailValue(infoExam);
+        setMode(MODE.LINK);
       }
     } catch (error) {
       console.log('Failed to create exam question', error);
@@ -76,6 +75,7 @@ function AddEditEQ(props) {
       </Typography>
       {mode === MODE.INFO && <AddInfoEQ data={topicList} onSubmit={handleInfoSubmit} />}
       {mode === MODE.DETAIL && <AddDetailEQ data={infoValue} onSubmit={handleDetailSubmit} />}
+      {mode === MODE.LINK && <LinkEQ data={detailValue} />}
 
       {/* <AddEditEQForm data={dataTopic} onSubmit={handleSubmit} /> */}
     </div>

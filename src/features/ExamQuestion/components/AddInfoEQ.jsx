@@ -1,20 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  Button,
-  Container,
-  Grid,
-  LinearProgress,
-  MenuItem,
-  Paper,
-  Typography,
-} from '@material-ui/core';
+import { Button, Container, LinearProgress, Paper, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import InputField from 'components/Form-controls/InputField';
 import SelectField from 'components/Form-controls/SelectField';
 import PropTypes from 'prop-types';
-import React from 'react';
 import { useForm } from 'react-hook-form';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import * as yup from 'yup';
 
 const useStyles = makeStyles((theme) => ({
@@ -106,8 +97,11 @@ function AddInfoEQ({ onSubmit = null, data = [] }) {
   });
 
   const handleSubmit = async (values) => {
+    const topicSelected = data.find((topic) => topic.code === values.topicCode);
+    const nameTopic = topicSelected.name;
+    const convertValues = { ...values, nameTopic };
     if (onSubmit) {
-      await onSubmit(values);
+      await onSubmit(convertValues);
     }
   };
 

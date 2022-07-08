@@ -42,7 +42,7 @@ AddDetailEQ.propTypes = {
 
 function AddDetailEQ({ onSubmit = null, data = {} }) {
   const classes = useStyles();
-  const { topicCode, time, numberQuestion, dataQuestion } = data;
+  const { nameTopic, name, topicCode, time, numberQuestion, dataQuestion } = data;
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -67,7 +67,7 @@ function AddDetailEQ({ onSubmit = null, data = {} }) {
 
   const form = useForm({
     defaultValues: {
-      topicCode: topicCode,
+      topicCode: nameTopic,
       numberQuestion: data.numberQuestion,
       time: time,
       questionCodes: [],
@@ -76,8 +76,10 @@ function AddDetailEQ({ onSubmit = null, data = {} }) {
   });
 
   const handleSubmit = async (values) => {
+    const convertValues = { ...values, topicCode, name };
+    delete convertValues.numberQuestion;
     if (onSubmit) {
-      await onSubmit(values);
+      await onSubmit(convertValues);
     }
   };
 
