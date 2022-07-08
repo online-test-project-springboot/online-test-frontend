@@ -1,12 +1,10 @@
 import { Box, Container, makeStyles, Typography } from '@material-ui/core';
-import { unwrapResult } from '@reduxjs/toolkit';
 import topicApi from 'api/topicApi';
 import TopicList from 'features/Topic/components/TopicList';
 import { getAllTopic } from 'features/Topic/topicSlice';
 import { useSnackbar } from 'notistack';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 ListPage.propTypes = {};
 const useStyles = makeStyles((theme) => ({
@@ -24,8 +22,7 @@ function ListPage(props) {
   useEffect(() => {
     (async () => {
       try {
-        console.log(topicList);
-        if (typeof topicList === 'object' && topicList.length === 0) {
+        if (Array.isArray(topicList) && topicList.length === 0) {
           const action = getAllTopic();
           await dispatch(action);
         }

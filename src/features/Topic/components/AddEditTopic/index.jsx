@@ -1,7 +1,9 @@
 import { makeStyles, Typography } from '@material-ui/core';
 import topicApi from 'api/topicApi';
+import { getAllTopic } from 'features/Topic/topicSlice';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { trimData } from 'utils';
 import AddEditForm from '../AddEditTopicForm';
@@ -19,6 +21,7 @@ function AddEditTopic(props) {
   const history = useHistory();
   const { topicId } = useParams();
   const isAddMode = !topicId;
+  const dispatch = useDispatch();
 
   const [dataTopic, setDataTopic] = useState({
     name: '',
@@ -35,7 +38,8 @@ function AddEditTopic(props) {
       } else {
         response = await topicApi.update(topicId, convertValues);
       }
-
+      const action = getAllTopic();
+      await dispatch(action);
       enqueueSnackbar(response.message, { variant: 'success', autoHideDuration: 1000 });
 
       setTimeout(() => {
