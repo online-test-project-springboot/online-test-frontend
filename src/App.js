@@ -1,4 +1,5 @@
 import BaseBg from 'components/Base-background';
+import DoExam from 'features/DoExam';
 import ExamQuestion from 'features/ExamQuestion';
 import TopicFeature from 'features/Topic';
 import React from 'react';
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" component={HomeFeature} exact />
         <Route path="/topic-list" component={TopicFeature} />
         <Route path="/examQuestion-list" component={ExamQuestion} />
+        <Route path="/doExam" component={DoExam} />
         {/* <Route path="/topic-list/create" component={CreatePage} /> 
          <Route path="/todos" component={TodoFeature} />
         <Route path="/albums" component={SongFeature} />

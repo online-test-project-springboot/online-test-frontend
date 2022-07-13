@@ -40,9 +40,12 @@ function HomeFeature(props) {
       <Box className={classes.elementHome}>
         <Typography variant="h6">THI TRẮC NGHIỆM ONLINE</Typography>
         <Typography variant="subtitle1">Trang web thi trắc nghiệm online</Typography>
-        <Button className={classes.loginBtn} color="inherit">
-          Tham gia thi
-        </Button>
+        <NavLink to={'/doExam'} className={classes.link}>
+          <Button className={classes.loginBtn} color="inherit">
+            Tham gia thi
+          </Button>
+        </NavLink>
+
         <NavLink to="/examQuestion-list" className={classes.link}>
           <Button className={classes.loginBtn} color="inherit">
             Tạo đề thi
