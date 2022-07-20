@@ -1,8 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Box, makeStyles } from '@material-ui/core';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import LinkExam from './page/LinkExam';
+import DetailPage from './page/DetailPage';
+import LinkPage from './page/LinkPage';
 
 DoExam.propTypes = {};
 
@@ -24,7 +23,8 @@ function DoExam(props) {
   return (
     <Box className={classes.root}>
       <Switch>
-        <Route path={match.path} component={LinkExam} exact />
+        <Route path={match.path} component={LinkPage} exact />
+        <Route path={`${match.path}/:examId`} component={DetailPage} exact />
       </Switch>
     </Box>
   );

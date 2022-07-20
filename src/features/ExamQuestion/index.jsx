@@ -27,7 +27,7 @@ function ExamQuestion(props) {
       <Switch>
         <Route path={match.path} component={ListPage} exact />
         <Route path={`${match.path}/add`} exact component={AddEditPage} />
-        <Route path={`${match.path}/edit/:topicId`} component={AddEditPage} />
+        <Route path={`${match.path}/edit/:examId`} component={AddEditPage} />
         <Route path={`${match.path}/detail/:topicId`} component={DetailPage} />
         <Route component={NotFound} />
       </Switch>
