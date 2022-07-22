@@ -1,6 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Box, Container, Grid, makeStyles, Paper } from '@material-ui/core';
+import InfoExam from 'features/DoExam/components/InfoExam';
 import InfoQuestion from 'features/DoExam/components/InfoQuestion';
 
 DetailPage.propTypes = {};
@@ -29,7 +28,7 @@ function DetailPage(props) {
               <InfoQuestion />
             </Grid>
             <Grid item className={classes.right}>
-              Phải
+              <InfoExam />
             </Grid>
           </Grid>
         </Container>
