@@ -34,14 +34,15 @@ function RadioField(props) {
           control={form.control}
           as={
             <RadioGroup aria-label="answer" name="answer">
-              {answerList.map((answer, index) => (
-                <FormControlLabel
-                  key={answer.code}
-                  value={answer.code}
-                  control={<Radio />}
-                  label={labelAnswer[index]}
-                />
-              ))}
+              {answerList &&
+                answerList.map((answer, index) => (
+                  <FormControlLabel
+                    key={answer.code}
+                    value={answer.code}
+                    control={<Radio />}
+                    label={labelAnswer[index]}
+                  />
+                ))}
             </RadioGroup>
           }
           id={name}
