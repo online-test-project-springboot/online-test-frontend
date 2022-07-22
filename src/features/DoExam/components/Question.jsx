@@ -8,6 +8,7 @@ import React from 'react';
 Question.propTypes = {
   closeDialog: PropTypes.func,
   data: PropTypes.object,
+  currentQuestion: PropTypes.number,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ANSWER_LIST = ['A', 'B', 'C', 'D'];
 
-function Question({ closeDialog = null, data = {} }) {
+function Question({ closeDialog = null, data = {}, currentQuestion = 0 }) {
   const classes = useStyles();
   // console.log(data.answers);
 
@@ -46,7 +47,7 @@ function Question({ closeDialog = null, data = {} }) {
   return (
     <Box padding={1} className={classes.root}>
       <Box>
-        <Typography>Câu hỏi 1</Typography>
+        <Typography>Câu hỏi {currentQuestion + 1}</Typography>
         <Typography>{data.content}</Typography>
       </Box>
 
