@@ -7,6 +7,7 @@ export const register = createAsyncThunk('user/register', async (payload) => {
 
   localStorage.setItem(StorageKeys.TOKEN, response.jwt.token);
   localStorage.setItem(StorageKeys.DATA, JSON.stringify(response.data));
+  localStorage.setItem(StorageKeys.DATAEXAM, JSON.stringify([]));
 
   return response.data;
 });
@@ -16,6 +17,7 @@ export const login = createAsyncThunk('user/login', async (payload) => {
 
   localStorage.setItem(StorageKeys.TOKEN, response.jwt.token);
   localStorage.setItem(StorageKeys.DATA, JSON.stringify(response.data));
+  localStorage.setItem(StorageKeys.DATAEXAM, JSON.stringify([]));
 
   return response.data;
 });
