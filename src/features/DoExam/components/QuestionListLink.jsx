@@ -1,7 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Box, makeStyles, Typography } from '@material-ui/core';
-import { Link, NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 QuestionListLink.propTypes = {
   data: PropTypes.array,

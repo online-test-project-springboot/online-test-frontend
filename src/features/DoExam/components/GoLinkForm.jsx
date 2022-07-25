@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
@@ -9,10 +8,10 @@ import {
   Paper,
   Typography,
 } from '@material-ui/core';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import InputField from 'components/Form-controls/InputField';
+import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
 GoLinkForm.propTypes = {
   handleLink: PropTypes.func,
@@ -84,9 +83,15 @@ const useStyles = makeStyles((theme) => ({
 
 function GoLinkForm({ handleLink = null }) {
   const classes = useStyles();
+  const location = window.location;
 
   const schema = yup.object().shape({
-    link: yup.string().required('Please enter link to do exam'),
+    link: yup
+      .string()
+      .required('Vui lòng nhập đường dẫn để làm bài kiểm tra')
+      .test('Validate url', 'Đường dẫn không hợp lệ', (value) => {
+        return value.includes(location.href);
+      }),
   });
 
   const form = useForm({
@@ -96,8 +101,8 @@ function GoLinkForm({ handleLink = null }) {
     resolver: yupResolver(schema),
   });
 
-  const handleOnSubmit = () => {
-    if (handleLink) handleLink();
+  const handleOnSubmit = (values) => {
+    if (handleLink) handleLink(values);
   };
   const { isSubmitting } = form.formState;
 
@@ -105,12 +110,12 @@ function GoLinkForm({ handleLink = null }) {
     <Box>
       {isSubmitting && <LinearProgress className={classes.progress} />}
       <Typography variant="h3" className={classes.title}>
-        Nhập đường link để vào phòng thi
+        Nhập đường dẫn để vào phòng thi
       </Typography>
       <Paper className={classes.root}>
         <Container>
           <form onSubmit={form.handleSubmit(handleOnSubmit)}>
-            <InputField name="link" label="Link" form={form} />
+            <InputField name="link" label="Đường dẫn" form={form} />
             <Button
               disabled={isSubmitting}
               type="submit"

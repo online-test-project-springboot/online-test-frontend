@@ -1,12 +1,9 @@
-import React from 'react';
+import { Box, Button, Container, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { Box, Button, Container, Radio, Typography } from '@material-ui/core';
-import DialogQuestion from 'components/DialogQuestion';
-import Question from './Question';
-import RadioField from 'components/Form-controls/RadioField';
-import AnswerList from './AnswerList';
-import QuestionListLink from './QuestionListLink';
 import { useState } from 'react';
+import AnswerList from './AnswerList';
+import Question from './Question';
+import QuestionListLink from './QuestionListLink';
 
 InfoQuestion.propTypes = {
   exam: PropTypes.object,

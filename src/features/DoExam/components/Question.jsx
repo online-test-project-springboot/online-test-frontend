@@ -1,9 +1,5 @@
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import ques from 'img/ques.PNG';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 Question.propTypes = {
   closeDialog: PropTypes.func,

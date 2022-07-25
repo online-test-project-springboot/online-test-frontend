@@ -1,13 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
-import Clock from './Clock';
 import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
-import { useState } from 'react';
-import StorageKeys from 'constants/storage-keys';
 import doExamApi from 'api/doExamApi';
+import StorageKeys from 'constants/storage-keys';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import Clock from './Clock';
 
-InfoExam.propTypes = {};
+InfoExam.propTypes = {
+  examId: PropTypes.string,
+  exam: PropTypes.object,
+};
 const useStyles = makeStyles((theme) => ({
   icon: {
     position: 'absolute',
@@ -15,10 +18,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function InfoExam({ examId }) {
+function InfoExam({ examId, exam }) {
   const classes = useStyles();
   const [openDialog, setOpenDialog] = useState(false);
   const [resultExam, setResultExam] = useState({});
+  const { fullName, email } = useSelector((state) => state.user.current);
+
+  console.log(exam);
 
   const handleSubmit = async () => {
     try {
@@ -33,6 +39,7 @@ function InfoExam({ examId }) {
       if (message) {
         setResultExam(data);
         setOpenDialog(true);
+        localStorage.setItem(StorageKeys.DATAEXAM, '[]');
       }
     } catch (error) {
       console.log('Failed to fetch submit exam:', error);
@@ -46,12 +53,12 @@ function InfoExam({ examId }) {
           handleSubmit={handleSubmit}
           resultExam={resultExam}
           openDialog={openDialog}
-          timeExam={0.1}
+          timeExam={exam.time}
         />
       </Box>
       <Box>
-        <Typography>Họ và tên:</Typography>
-        <Typography>Ngày sinh</Typography>
+        <Typography>Họ và tên: {fullName}</Typography>
+        <Typography>Email: {email}</Typography>
       </Box>
       <Box>
         <Button disabled={openDialog} variant="outlined" color="primary" onClick={handleSubmit}>

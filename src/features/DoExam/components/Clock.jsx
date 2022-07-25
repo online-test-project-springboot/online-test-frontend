@@ -1,10 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Box, makeStyles } from '@material-ui/core';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { createTimer } from 'utils';
-import { useCountdown } from 'hooks/useCountdown';
 import DateTimeDisplay from './DateTimeDisplay';
 import ExpiredNotice from './ExpiredNotice';
 
@@ -89,7 +86,12 @@ function Clock({ timeExam, openDialog, resultExam, handleSubmit }) {
   useEffect(() => {
     timer = createTimer(timeExam, handleOnChange, handleOnFinish);
     timer.start();
-  }, []);
+
+    return () => {
+      console.log('xoa ne');
+      timer.clear();
+    };
+  }, [timeExam]);
 
   return (
     <Box display="inline-block">
