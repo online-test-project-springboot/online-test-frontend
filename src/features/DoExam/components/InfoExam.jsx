@@ -24,8 +24,6 @@ function InfoExam({ examId, exam }) {
   const [resultExam, setResultExam] = useState({});
   const { fullName, email } = useSelector((state) => state.user.current);
 
-  console.log(exam);
-
   const handleSubmit = async () => {
     try {
       const answerList = JSON.parse(localStorage.getItem(StorageKeys.DATAEXAM));

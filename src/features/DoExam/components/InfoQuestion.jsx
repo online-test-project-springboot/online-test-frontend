@@ -1,5 +1,6 @@
 import { Box, Button, Container, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import AnswerList from './AnswerList';
 import Question from './Question';
@@ -12,6 +13,7 @@ InfoQuestion.propTypes = {
 function InfoQuestion({ exam = {} }) {
   const { code, name, time, topicName, questions } = exam;
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answerSelect, setAnswerSelect] = useState();
 
   const handleNextQuestion = () => {
     if (currentQuestion === questions.length - 1) return;
@@ -26,13 +28,24 @@ function InfoQuestion({ exam = {} }) {
   };
 
   const handleLinkQuestion = (numberQuestion) => {
-    console.log(numberQuestion);
     setCurrentQuestion(numberQuestion);
   };
 
+  const isSelected = () => {
+    const cloneAnswerSelect = [...answerSelect];
+    cloneAnswerSelect[currentQuestion] = true;
+    setAnswerSelect(cloneAnswerSelect);
+  };
+
+  useEffect(() => {
+    if (questions) {
+      const newArr = Array.from({ length: questions.length }, (v, i) => false);
+      setAnswerSelect(newArr);
+    }
+  }, [questions]);
+
   return (
     <Box>
-      <Typography>DEMO</Typography>
       <Box display="flex">
         <Typography>Tên môn thi: {topicName}</Typography>
         <Typography>Có câu {questions?.length} hỏi</Typography>
@@ -43,7 +56,7 @@ function InfoQuestion({ exam = {} }) {
 
       <Box>
         <Container>
-          <AnswerList data={questions?.[currentQuestion]} />
+          <AnswerList isSelected={isSelected} data={questions?.[currentQuestion]} />
           <Button disabled={currentQuestion === 0} variant="outlined" onClick={handlePrevQuestion}>
             Câu trước
           </Button>
@@ -62,6 +75,7 @@ function InfoQuestion({ exam = {} }) {
             currentQuestion={currentQuestion}
             handleLinkQuestion={handleLinkQuestion}
             data={questions}
+            answerSelect={answerSelect}
           />
         </Container>
       </Box>

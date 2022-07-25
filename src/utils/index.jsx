@@ -34,7 +34,6 @@ export const createTimer = (minutes, onChange, onFinish) => {
     let currentSecond = minutes * 60;
 
     intervalId = setInterval(() => {
-      console.log(currentSecond);
       onChange?.(currentSecond);
 
       currentSecond--;

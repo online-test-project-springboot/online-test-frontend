@@ -49,7 +49,7 @@ function ExpiredNotice({ open, resultExam }) {
           <Typography>Bài thi: {resultExam.examName}</Typography>
           <Typography>Chủ để: {resultExam.topicName}</Typography>
           <Typography>Thí sinh: {resultExam.examPersonName}</Typography>
-          <Typography>Thời gian làm bài: {resultExam.time}</Typography>
+          <Typography>Thời gian làm bài: {resultExam.time} phút</Typography>
           <Typography>
             Thời gian bắt đầu làm bài: {moment(resultExam.startTime).format('LTS')}
           </Typography>

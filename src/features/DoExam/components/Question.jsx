@@ -19,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
   item: {
     marginBottom: theme.spacing(4),
   },
+
+  root: {
+    minHeight: '160px',
+  },
 }));
 
 const ANSWER_LIST = ['A', 'B', 'C', 'D'];

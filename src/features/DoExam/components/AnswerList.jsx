@@ -16,7 +16,6 @@ AnswerList.propTypes = {};
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '40%',
     textAlign: 'center',
     margin: '0 auto',
   },
@@ -98,7 +97,7 @@ function defaultValueRadio(questionCode) {
   return '';
 }
 
-function AnswerList({ data = {} }) {
+function AnswerList({ data = {}, isSelected = null }) {
   const classes = useStyles();
 
   const [value, setValue] = React.useState('');
@@ -114,6 +113,8 @@ function AnswerList({ data = {} }) {
     );
 
     setValue(event.target.value);
+
+    if (isSelected) isSelected();
   };
 
   const labelAnswer = ['Chọn đáp án A', 'Chọn đáp án B', 'Chọn đáp án C', 'Chọn đáp án D'];
@@ -127,7 +128,7 @@ function AnswerList({ data = {} }) {
       <Paper className={classes.root}>
         <Container>
           <FormControl component="fieldset">
-            <RadioGroup aria-label="answer" name="answer" value={value} onChange={handleChange}>
+            <RadioGroup row aria-label="answer" name="answer" value={value} onChange={handleChange}>
               {data.answers &&
                 data.answers.map((answer, index) => (
                   <FormControlLabel
