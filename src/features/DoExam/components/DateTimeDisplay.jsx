@@ -25,7 +25,7 @@ function DateTimeDisplay({ value, type }) {
   const classes = useStyles();
   return (
     <div className={classes.countdown}>
-      <p>{value}</p>
+      <p>{value || 0}</p>
       <span>{type}</span>
     </div>
   );

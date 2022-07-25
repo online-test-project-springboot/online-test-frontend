@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import Clock from './Clock';
 import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
+import { useState } from 'react';
+import StorageKeys from 'constants/storage-keys';
+import doExamApi from 'api/doExamApi';
 
 InfoExam.propTypes = {};
 const useStyles = makeStyles((theme) => ({
@@ -12,20 +15,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function InfoExam(props) {
+function InfoExam({ examId }) {
   const classes = useStyles();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [resultExam, setResultExam] = useState({});
+
+  const handleSubmit = async () => {
+    try {
+      const answerList = JSON.parse(localStorage.getItem(StorageKeys.DATAEXAM));
+
+      const payload = {
+        answers: answerList,
+      };
+
+      const { message, data } = await doExamApi.submitExam(examId, payload);
+
+      if (message) {
+        setResultExam(data);
+        setOpenDialog(true);
+      }
+    } catch (error) {
+      console.log('Failed to fetch submit exam:', error);
+    }
+  };
   return (
     <Box>
       <Box>
         <AccessAlarmIcon className={classes.icon} />
-        <Clock timeExam={0.1} />
+        <Clock
+          handleSubmit={handleSubmit}
+          resultExam={resultExam}
+          openDialog={openDialog}
+          timeExam={0.1}
+        />
       </Box>
       <Box>
         <Typography>Họ và tên:</Typography>
         <Typography>Ngày sinh</Typography>
       </Box>
       <Box>
-        <Button variant="outlined">Nộp bài thi</Button>
+        <Button disabled={openDialog} variant="outlined" color="primary" onClick={handleSubmit}>
+          Nộp bài thi
+        </Button>
       </Box>
 
       <Box>

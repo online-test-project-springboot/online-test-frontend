@@ -24,3 +24,31 @@ export const trucateText = (text, maxLength) => {
 
   return `${text.slice(0, maxLength - 1)}…`;
 };
+
+export const createTimer = (minutes, onChange, onFinish) => {
+  let intervalId = null;
+
+  function start() {
+    clear();
+
+    let currentSecond = minutes * 60;
+
+    intervalId = setInterval(() => {
+      console.log(currentSecond);
+      onChange?.(currentSecond);
+
+      currentSecond--;
+
+      if (currentSecond < 1) {
+        clear();
+        onFinish?.();
+      }
+    }, 1000);
+  }
+
+  function clear() {
+    clearInterval(intervalId);
+  }
+
+  return { start, clear };
+};

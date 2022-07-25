@@ -44,7 +44,7 @@ function DetailPage(props) {
               <InfoQuestion exam={exam} />
             </Grid>
             <Grid item className={classes.right}>
-              <InfoExam />
+              <InfoExam examId={examId} />
             </Grid>
           </Grid>
         </Container>
