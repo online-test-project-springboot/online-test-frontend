@@ -3,7 +3,7 @@ import NotFound from 'components/NotFound';
 import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import AddEditPage from './page/AddEditPage';
-import DetailPage from './page/DetailPage';
+import DetailPage from './../Topic/page/DetailPage';
 import ListPage from './page/ListPage';
 
 ExamQuestion.propTypes = {};

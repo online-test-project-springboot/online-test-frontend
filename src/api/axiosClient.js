@@ -37,7 +37,7 @@ axiosClient.interceptors.response.use(
     //   throw new Error(message);
     // }
     const message = data.message;
-      throw new Error(message);
+    throw new Error(message);
     return Promise.reject(error);
   }
 );
