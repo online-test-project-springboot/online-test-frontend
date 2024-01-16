@@ -82,49 +82,6 @@ function DetailPage(props) {
     (async () => {
       try {
         const { data } = await questionApi.getAll(topicId);
-
-        // const data = {
-        //   name: 'Toán cao cấp A1',
-        //   listQuestion: [
-        //     {
-        //       id: 1,
-        //       thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        //       img: '',
-        //       trueAnswer: 'A',
-        //     },
-        //     {
-        //       id: 2,
-        //       thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        //       img: '',
-        //       trueAnswer: 'A',
-        //     },
-        //     {
-        //       id: 3,
-        //       thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        //       img: '',
-        //       trueAnswer: 'A',
-        //     },
-        //     {
-        //       id: 4,
-        //       thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        //       img: '',
-        //       trueAnswer: 'A',
-        //     },
-        //     {
-        //       id: 5,
-        //       thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        //       img: '',
-        //       trueAnswer: 'A',
-        //     },
-        //     {
-        //       id: 6,
-        //       thread: 'Tìm các cận dưới đúng và cận trên đúng trong R nếu chúng tồn tại của tập',
-        //       img: '',
-        //       trueAnswer: 'A',
-        //     },
-        //   ],
-        // };
-
         setQuestionList(data);
       } catch (error) {
         console.log('Failed to fetch question list', error);

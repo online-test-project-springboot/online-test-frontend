@@ -1,3 +1,3 @@
 export const MESSAGES = {
-    SUCCESSFULLY: 'successfully',
+    SUCCESSFULLY: 'Success',
 }

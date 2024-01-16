@@ -41,9 +41,11 @@ function AddEditEQ(props) {
   const handleInfoSubmit = async (values) => {
     try {
       const convertValues = trimData(values);
+      console.log("AddEditEQ: " + convertValues);
       const { message, data } = await questionApi.getAll(convertValues.topicCode);
       if (message === MESSAGES.SUCCESSFULLY) {
         const dataQuestion = data;
+        console.log(dataQuestion);
         setInfoValue({ ...convertValues, dataQuestion });
         setMode(MODE.DETAIL);
       }

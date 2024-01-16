@@ -5,7 +5,6 @@ import StorageKeys from 'constants/storage-keys';
 
 export const getAllTopic = createAsyncThunk('topics', async () => {
   const response = await topicApi.getAll();
-
   localStorage.setItem(StorageKeys.TOPICLIST, JSON.stringify(response.data))
   return response.data;
 });
